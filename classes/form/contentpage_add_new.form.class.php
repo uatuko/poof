@@ -1,24 +1,24 @@
 <?php
 
 class contentpage_add_new implements FormSubmitInterface {
-	
+
 	private $form_id;
 	private $config;
-	
+
 	public function __construct($form_id, $config) {
 		$this->form_id = $form_id;
-		$this->config = $config;	
+		$this->config = $config;
 	}
-	
+
 	public function ReturnSubmitForm() {
-		
+
 		$return = "Error Saving: ";
-		
+
 		if ($_POST['template'] == "") {
 			$return = $return."Template is null";
 		} else {
-			$db = new Database($this->config->getDatabaseConfig());
-			
+			$db = new Database($this->config->GetDatabaseConfig());
+
 			if ($db->ExecuteMultiQuery("CALL sqd_amendNamedContentPage('".$_POST['alias']."', '".$_POST['page-name']."', '".$_POST['template']."', @x); SELECT @x;")) {
 				$db->MultiQueryNextResult();
 				if ($result = $db->MultiQueryFetchResults()) {
@@ -35,13 +35,13 @@ class contentpage_add_new implements FormSubmitInterface {
 					}
 				}
 			}
-			
+
 			unset($db);
 		}
-		
+
 		return $return;
 	}
-	
+
 }
 
 ?>

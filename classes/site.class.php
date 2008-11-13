@@ -15,10 +15,10 @@ class Site {
 			$this->config = $default_config;
 		}
 		
-		$this->db = new Database($this->config->getDatabaseConfig());
+		$this->db = new Database($this->config->GetDatabaseConfig());
 		$this->theme = new Theme($this->config);
 
-		$this->page_template = new Template('themes/'.$this->theme->getThemeName($this->config->getSiteName()).'/templates/site.template.html', 'local');
+		$this->page_template = new Template('themes/'.$this->theme->GetThemeName($this->config->GetSiteName()).'/templates/site.template.html', 'local');
 	}
 
 	public function __destruct() {
@@ -64,7 +64,7 @@ class Site {
 		$content_classes = array();
 		$rendered_classes = array();
 		
-		$content_classes = $this->CreateContentClasses($this->page_template->getContents());
+		$content_classes = $this->CreateContentClasses($this->page_template->GetContents());
 		$rendered_classes = $this->RenderContentClasses($content_classes);
 		
 		//print_r($this->theme);

@@ -78,8 +78,8 @@ class Config {
 	}
 	
 	/* PUBLIC Functions and PROPERTIES */
-	public function getDatabaseConfig() { return $this->db_config; }
-	public function getSiteName() { return $this->site_config->site_name; }
+	public function GetDatabaseConfig() { return $this->db_config; }
+	public function GetSiteName() { return $this->site_config->site_name; }
 	
 }
 

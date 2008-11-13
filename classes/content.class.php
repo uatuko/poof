@@ -4,22 +4,22 @@ class Content implements RenderInterface, AdminInterface {
 
 	protected $content_id;
 	protected $db;
-	
+
 	public function __construct($content_id, $config) {
 		$this->content_id = $content_id;
-		$this->db = new Database($config->getDatabaseConfig());
+		$this->db = new Database($config->GetDatabaseConfig());
 	}
-	
+
 	public function __destruct() {
-		unset($this->db);	
+		unset($this->db);
 	}
-	
-	
+
+
 	public function ReturnRenderedContent() {
-		
+
 		$return_html = "";
-		$db_prefix = $this->db->getDBPrefix();
-		
+		$db_prefix = $this->db->GetDBPrefix();
+
 		if ($this->db->ExecuteMultiQuery("CALL ".$db_prefix."getContent('$this->content_id')")) {
 			if ($result = $this->db->MultiQueryFetchResults()) {
 				if ($row = $this->db->FetchRow($result)) {
@@ -35,17 +35,17 @@ class Content implements RenderInterface, AdminInterface {
 							$return_html = $this->content_id;
 					}
 				}
-				
-			} 
+
+			}
 		} else $return_html = $this->content_id;
-		
+
 		return $return_html;
 	}
-	
+
 	public function ReturnAdminPage() {
 		return "Content::Admin Page";
 	}
-	
+
 }
 
 ?>

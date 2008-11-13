@@ -18,7 +18,7 @@ class Database {
 	
 	// PROPERTIES
 	
-	public function getDBPrefix() {
+	public function GetDBPrefix() {
 		return $this->db_prefix;
 	}
 	
@@ -35,7 +35,7 @@ class Database {
 		if ($this->mysqli->multi_query($sql_query)) {
 			do {
 				if ($result = $this->mysqli->store_result()) {
-					while ($row = $result->fetch_array()) {
+					while ($row = $result->fetch_row()) {
 						$return_result[] = $row;
 					}
 				}

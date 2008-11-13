@@ -16,11 +16,11 @@ class ContentPage extends Content {
 		unset($this->theme);
 	}
 	
-	private function getContentPageTemplate() {
+	private function GetContentPageTemplate() {
 
 		$page_alias = split("/", $_GET['q'], 2);
 		$r_template = false;
-		$db_prefix = $this->db->getDBPrefix();
+		$db_prefix = $this->db->GetDBPrefix();
 		
 		if (!$page_alias[0]) {
 			$page_alias[0] = "home";
@@ -30,7 +30,7 @@ class ContentPage extends Content {
 			foreach ($results as $row) {
 				if ($row[1] = 1) {	// content visibility = 1 (show content)
 					if ($row[0] = 1) {	// content priority = 1 (give priority to local template)
-						$tpl_file = "themes/".$this->theme->getThemeName($this->config->getSiteName())."/templates/contentpage/".$this->content_id."template.html";
+						$tpl_file = "themes/".$this->theme->GetThemeName($this->config->GetSiteName())."/templates/contentpage/".$this->content_id."template.html";
 						if (is_file($tpl_file)) {
 							$r_template = new Template($tpl_file, 'local', $this->config);
 						} else $r_template = new Template($row[2], 'dbase', $this->config);
@@ -76,11 +76,11 @@ class ContentPage extends Content {
 	
 	public function ReturnRenderedContent() {
 
-		if ($template = $this->getContentPageTemplate()) {
+		if ($template = $this->GetContentPageTemplate()) {
 			$content_classes = array();
 			$rendered_classes = array();
 			
-			$content_classes = $this->CreateContentClasses($template->getContents());
+			$content_classes = $this->CreateContentClasses($template->GetContents());
 			$rendered_classes = $this->RenderContentClasses($content_classes);
 			
 			return $template->ParseTemplate($rendered_classes);
