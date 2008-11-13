@@ -50,7 +50,7 @@ class Table implements RenderInterface, AdminInterface {
 		$rendered_content = "";
 
 		$table_template = new TableTemplate($this->GetTableTemplateID(), 'dbase', $this->config);
-		$rendered_content = $table_template->ParseTemplate($rendered_content);
+		$rendered_content = $table_template->ParseTemplate($this->GetTableContentsArray());
 
 		unset($table_template);
 
@@ -96,22 +96,68 @@ class TableTemplate extends Template {
 		return substr($s, 5, ($end_pos - 5));
 	}
 	
+	private function GetTemplateCell() {
+		$template = $this->GetTemplate();
+		
+		$s = strstr($template, "[cell]");
+		$end_pos = strpos($s, '[/cell]');
+		
+		return substr($s, 6, ($end_pos - 6));		
+	}
+	
+	private function RenderRow($cell_string) {
+
+		$template_row = $this->GetTemplateRow();
+		
+		//$cell_start = strpos($template_row, "[cell]");
+		//$cell_end = (strpos($template_row, '[/cell]') + 1);
+		
+		$cell_header = preg_split("/\[cell\]/", $template_row);
+		$cell_footer = preg_split("/\[\/cell\]/", $template_row);
+		
+		//return str_replace(substr($template_row, $cell_start, $cell_end), $cell_string, $template_row);
+		return $cell_header[0] . $cell_string . $cell_footer[1]; 
+		
+	}
+	
 	private function FillCellData(&$cells) {
-		//
+		
+		$return_row = "";
+		$rendered_cells = "";
+		
+		$template_cell = $this->GetTemplateCell();
+		
+		foreach ($cells as $cell) {
+			$rendered_cells = $rendered_cells . preg_replace("/\{cell\}/", $cell, $template_cell);
+		}
+		
+		$return_row = $this->RenderRow($rendered_cells);
+		
+		return $return_row;
 	}
 	
 	public function ParseTemplate(&$table_content) {
 		
 		$return_template = "";
-
-		foreach ($table_content as $row) {
-			foreach ($row as $cells) {
-				
-			}
-		}
-		return $this->GetTemplateRow();
+		$rendered_rows = "";
 		
-		return $this->GetTemplate();
+		foreach ($table_content as $cells) {
+			$rendered_rows = $rendered_rows . $this->FillCellData($cells);
+		}
+		
+		//$row_start = strpos($this->GetTemplate(), "[row]");
+		//$row_end = (strpos($this->GetTemplate(), '[/row]') + 1);
+		
+		$rs = preg_split("/\[row\]/", $this->GetTemplate());
+		$re = preg_split("/\[\/row\]/", $this->GetTemplate());
+		
+		//$row_replace = substr($this->GetTemplate(), $row_start, $row_end);
+		//$return_template = str_replace($row_replace, $rendered_rows, $this->GetTemplate());
+
+		$return_template = $rs[0] . $rendered_rows . $re[1];
+		
+		return $return_template;
+		
 	}
 
 }
