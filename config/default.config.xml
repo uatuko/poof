@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<config>
+	<site>
+		<name>default</name>
+	</site>
+	<database>
+		<mysql>
+			<server>localhost</server>
+			<port>3306</port>
+			<username>sqdAdmin</username>
+			<password>noa</password>
+			<dbase>sqd17_oo</dbase>
+			<db_prefix>sqd_</db_prefix>
+		</mysql>
+	</database>
+</config>

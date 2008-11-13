@@ -1,0 +1,8 @@
+
+This folder will contain all the template files required.
+
+Will be structured,
+e.g.
+
+admin Module templates will be in the 'admin' folder
+

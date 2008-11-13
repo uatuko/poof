@@ -1,0 +1,73 @@
+/* CSS Document */
+
+html {
+    font-size: 12px;
+}
+
+body {
+    color:#474747;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;	
+}
+
+/* TABLES */
+table.m_body {
+	border-width:0.01em;
+	border-color:#000000;
+	border-style:solid;
+	padding:5px;
+	background-color:#FFFFFF;
+	width:100%;
+}
+
+table.m_body td {
+	border-width:0.01em;
+	border-color:#F0F0F0;
+	border-style:solid;
+	text-align:center;
+}
+
+table.m_body td.l_menu {
+	border-width:0.01em;
+	border-color:#EAEAEA;
+	border-style:solid;
+	padding:2px;
+	text-align:left;
+	vertical-align:top;
+	width:20%;
+}
+
+table.m_body td.l_menu ul {
+	margin: 0 0 2px 0; 
+	padding: 5px; 
+	border: 0; 
+	list-style: none; 
+}
+
+table.m_body td.m_body {
+	padding:2px 5px 5px 10px;
+	text-align:left;	
+}
+
+table.table-default td {
+	border:0;
+}
+
+/* ConfigPage */
+table.configpage-add-new td {
+	border:0;
+	text-align:left;
+}
+
+/* LINKS */
+a {
+	color:#6498D7;
+	text-decoration:none;
+	text-transform:none;
+}
+
+a:hover {
+	color:#4186BE;
+	text-decoration:underline;
+}
+
