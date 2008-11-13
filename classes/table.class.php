@@ -88,39 +88,18 @@ class TableTemplate extends Template {
 	}
 
 	private function GetTemplateRow() {
-		$template = $this->GetTemplate();
-		
-		$s = strstr($template, "[row]");
-		$end_pos = strpos($s, '[/row]');
-		
-		return substr($s, 5, ($end_pos - 5));
+		$row_s = preg_split("/\[row\]/", $this->GetTemplate(), 2);
+		$row_e = preg_split("/\[\/row\]/", $row_s[1], 2);
+		return $row_e[0];
 	}
 	
 	private function GetTemplateCell() {
-		$template = $this->GetTemplate();
-		
-		$s = strstr($template, "[cell]");
-		$end_pos = strpos($s, '[/cell]');
-		
-		return substr($s, 6, ($end_pos - 6));		
+		$cell_s = preg_split("/\[cell\]/", $this->GetTemplate(), 2);
+		$cell_e = preg_split("/\[\/cell\]/", $cell_s[1], 2);
+		return $cell_e[0];	
 	}
 	
-	private function RenderRow($cell_string) {
-
-		$template_row = $this->GetTemplateRow();
-		
-		//$cell_start = strpos($template_row, "[cell]");
-		//$cell_end = (strpos($template_row, '[/cell]') + 1);
-		
-		$cell_header = preg_split("/\[cell\]/", $template_row);
-		$cell_footer = preg_split("/\[\/cell\]/", $template_row);
-		
-		//return str_replace(substr($template_row, $cell_start, $cell_end), $cell_string, $template_row);
-		return $cell_header[0] . $cell_string . $cell_footer[1]; 
-		
-	}
-	
-	private function FillCellData(&$cells) {
+	private function RenderCells(&$cells) {
 		
 		$return_row = "";
 		$rendered_cells = "";
@@ -131,9 +110,13 @@ class TableTemplate extends Template {
 			$rendered_cells = $rendered_cells . preg_replace("/\{cell\}/", $cell, $template_cell);
 		}
 		
-		$return_row = $this->RenderRow($rendered_cells);
+		$cell_header = preg_split("/\[cell\]/", $this->GetTemplateRow(), 2);
+		$cell_footer = preg_split("/\[\/cell\]/", $this->GetTemplateRow(), 2);
+		
+		$return_row = $cell_header[0] . $rendered_cells . $cell_footer[1];
 		
 		return $return_row;
+		
 	}
 	
 	public function ParseTemplate(&$table_content) {
@@ -142,19 +125,13 @@ class TableTemplate extends Template {
 		$rendered_rows = "";
 		
 		foreach ($table_content as $cells) {
-			$rendered_rows = $rendered_rows . $this->FillCellData($cells);
+			$rendered_rows = $rendered_rows . $this->RenderCells($cells);
 		}
 		
-		//$row_start = strpos($this->GetTemplate(), "[row]");
-		//$row_end = (strpos($this->GetTemplate(), '[/row]') + 1);
+		$row_header = preg_split("/\[row\]/", $this->GetTemplate(), 2);
+		$row_footer = preg_split("/\[\/row\]/", $this->GetTemplate(), 2);
 		
-		$rs = preg_split("/\[row\]/", $this->GetTemplate());
-		$re = preg_split("/\[\/row\]/", $this->GetTemplate());
-		
-		//$row_replace = substr($this->GetTemplate(), $row_start, $row_end);
-		//$return_template = str_replace($row_replace, $rendered_rows, $this->GetTemplate());
-
-		$return_template = $rs[0] . $rendered_rows . $re[1];
+		$return_template = $row_header[0] . $rendered_rows . $row_footer[1];
 		
 		return $return_template;
 		
