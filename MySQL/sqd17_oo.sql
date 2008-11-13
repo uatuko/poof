@@ -440,8 +440,8 @@ CREATE TABLE `sqd_table_templates` (
   `template_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`table_id`),
   KEY `template_id` (`template_id`),
-  CONSTRAINT `sqd_table_templates_fk1` FOREIGN KEY (`template_id`) REFERENCES `sqd_templates` (`template_id`) ON UPDATE CASCADE,
-  CONSTRAINT `sqd_table_templates_fk` FOREIGN KEY (`table_id`) REFERENCES `sqd_tables` (`table_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `sqd_table_templates_fk` FOREIGN KEY (`table_id`) REFERENCES `sqd_tables` (`table_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `sqd_table_templates_fk1` FOREIGN KEY (`template_id`) REFERENCES `sqd_templates` (`template_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -473,7 +473,7 @@ CREATE TABLE `sqd_tables` (
 
 /*!40000 ALTER TABLE `sqd_tables` DISABLE KEYS */;
 INSERT INTO `sqd_tables` (`table_id`,`table_alias`,`table_query`) VALUES 
- (1,'admin','SELECT * FROM sqd_modules;');
+ (1,'admin','SELECT m.module_id, m.module_name, CAST(m.enabled as unsigned integer) AS enabled FROM sqd_modules m;');
 /*!40000 ALTER TABLE `sqd_tables` ENABLE KEYS */;
 
 
@@ -486,7 +486,7 @@ CREATE TABLE `sqd_templates` (
   `template_id` int(11) unsigned NOT NULL auto_increment,
   `template` text NOT NULL,
   PRIMARY KEY  (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_templates`
@@ -495,18 +495,17 @@ CREATE TABLE `sqd_templates` (
 /*!40000 ALTER TABLE `sqd_templates` DISABLE KEYS */;
 INSERT INTO `sqd_templates` (`template_id`,`template`) VALUES 
  (1,'<p><strong><br />\r\n1. What is initrd?</strong><br />\r\nInitial Ram Disk or initrd is a compressed file system which is uncompressed and loaded to the memory by the boot loader. When the kernel is booting it treats this initial file system as the root file system and executes the first program /linuxrc. (Note: for Debian kernels the default is /init) This program then mounts the actual file system and passes the control to it and ideally un-mounting the initrd and freeing memory. </p>\r\n<p>Initial ram disk is a way of resolving the chicken and egg dilemma for the kernel. Imagine you have the actual root file system in a device which requires the kernel to use additional modules, but in order to load these modules the kernel has to access the file system. Thus the initrd could contain all the required modules and mount the actual file system and then pass over the control. </p>\r\n<p><strong>2. Why create an initrd?</strong><br />\r\nAt a glance all the distributions come with an initrd (if they need one) and most of the time provides tools to upgrade it. So why go through all the trouble of making a custom initrd? Well, the answer is simple. You can\'t get the stock initrd to do what you want in the way you want, especially if you are building a system of your own. And that?s when you want to tweak the stock initrd or create your own.</p>\r\n<p><strong>3. Modifying the Debian initrd</strong><br />\r\nAs a start, we\'ll try modifying a stock initrd. I chose Debian since I?m familiar with it but you could use your own. Obviously the steps won?t be the same, but once you get the basics you?ll be able to continue on your own. Try looking into the troubleshooting section if you face any difficulties. </p>\r\n<p><em><u>3.1 What you need</u></em><br />\r\n\r\nAll you need is a Linux System to do your work and a stock initrd.<br />\r\nI chose the initrd from the Debian Etch business-card installation disk since it is simple and small (not the smallest) in size. You can always use your system initrd but remember not to modify the original and always keep a copy of the original. </p>\r\n<p><em><u>3.2 Extracting the initrd</u></em><br />\r\nDownload the <a href=\"http://www.debian.org/CD/netinst/#businesscard-stable\" target=\"_blank\">business card</a> iso image from <a href=\"http://www.debian.org/\" target=\"_blank\">Debian</a>  and mount it.<br />\r\n<strong><br />\r\n<code><br />\r\n# Create the folder to mount<br />\r\n\r\nmkdir ?p /mnt/isoimage/<br />\r\n</code></strong><br />\r\n<strong><code><br />\r\n# Mount the iso image<br />\r\nmount -o loop -t iso9660 debian-40r2-i386-businesscard.iso /mnt/isoimage/<br />\r\n</code><br />\r\n</strong></p>\r\n<p>It is a good idea to have a clean working directory so you know what you are doing at the moment and it is easier to manage. I setup my working directory as <strong>$HOME/WorkBench</strong></p>\r\n<p>Now let?s copy the initrd from Debian iso image. But first we need to find where the initrd image is. You could find the initrd image in /boot in a Linux System so hoping that the iso image has the same structure we?ll look in the mounted image structure.<br />\r\n<code><br />\r\n$ ls ?l /mnt/isoimage/<br />\r\n\r\n</code></p>\r\n<p>Unfortunately the boot folder is not there, but we could find a folder named ?isolinux?. Since we find this folder we could conclude the iso image uses the <a href=\"http://syslinux.zytor.com/iso.php\" target=\"_blank\">ISOLINUX</a> boot system. </p>\r\n<p>So we look inside isolinux folder,<br />\r\n<code><br />\r\n$ ls ?l /mnt/isoimage/isolinux<br />\r\n</code></p>\r\n<p>Now we have the <strong>isolinux.cfg</strong> file which is used to store ISOLINUX configuration.<br />\r\n\r\n<strong><code><br />\r\n$ less /mnt/isoimage/isolinux/isolinux.cfg<br />\r\n</code></strong></p>\r\n<p>Try to find something like,<br />\r\n<strong><br />\r\n<code><br />\r\nLABEL	install<br />\r\nkernel 	/install.386/vmlinuz<br />\r\nappend	vga=normal initrd=/install.386/initrd.gz ?<br />\r\n</code><br />\r\n</strong></p>\r\n<p>There we are, the initrd image is in install.386 folder. Copy it to your work bench.</p>\r\n\r\n<p><strong><code><br />\r\n$ cp /mnt/isoimage/isolinux/install.386/initrd.gz $HOME/WorkBench<br />\r\n$ cd $HOME/WorkBench<br />\r\n</code><br />\r\n'),
- (2,'/squad17.com/');
-INSERT INTO `sqd_templates` (`template_id`,`template`) VALUES 
+ (2,'/squad17.com/'),
  (3,'{menu}'),
  (4,'{Admin:admin}'),
  (5,'<a href=\"{url_prefix}admin/modules\">Modules</a>'),
  (6,'Default Modules Page <br /> Wil be listing all the configurable modules...'),
  (7,'<table class=\"table-default\">\r\n<tr>\r\n	<td>\r\n		<a href=\"{url_prefix}admin/modules/ContentPage/?config=add\">Add new</a>\r\n	</td>\r\n</tr>\r\n</table>'),
  (8,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page alias (Optional):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" /></td></tr>\r\n<tr><td>Page name (Optional):</td></tr>\r\n<tr><td><input type=\"text\" name=\"page-name\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" /></td></tr>\r\n</table>\r\n</form>'),
- (10,'User - Page template');
-INSERT INTO `sqd_templates` (`template_id`,`template`) VALUES 
- (11,'<table>\r\n[row]\r\n<tr>[cell]<td>{cell}</td>[/cell]</tr>\r\n[/row]\r\n</table>'),
- (12,'Content page saved successfully...');
+ (10,'User - Page template'),
+ (11,'<table>\r\n[row]\r\n<tr>\r\n[cell]<td>{cell}</td>[/cell]\r\n</tr>\r\n[/row]\r\n</table>'),
+ (12,'Content page saved successfully...'),
+ (13,'[row]\r\n<ul>\r\n[cell] \r\n<li> {cell} \r\n</li>\r\n[/cell]\r\n</ul>\r\n\r\n[/row]');
 /*!40000 ALTER TABLE `sqd_templates` ENABLE KEYS */;
 
 
@@ -544,12 +543,7 @@ DELIMITER $$
 CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_addNamedContentPage`(IN _alias VARCHAR(40), IN _name VARCHAR(40), IN _template TEXT, OUT _RETURNCODE TINYINT)
 BEGIN
 
-/* RETURN CODES
-	0 - Success
-    1 - Nothing inserted
-    10 - alias exists
-    20 - name exists
-*/
+
 
 DECLARE intTMP INT DEFAULT 0;
 
@@ -631,15 +625,7 @@ DELIMITER $$
 CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_amendNamedContentPage`(IN _alias VARCHAR(40), IN _name VARCHAR(40), IN _template TEXT, OUT _RETURNCODE TINYINT)
 BEGIN
 
-/* This will insert a new named content page or
-	if _alias exists it will simply add a new 
-    named content page.
-    
- RETURN CODES
-	0 - Success
-    1 - Nothing inserted
-    20 - name exists
-*/
+
 
 DECLARE intTMP INT DEFAULT 0;
 
