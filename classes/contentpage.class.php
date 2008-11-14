@@ -45,6 +45,7 @@ class ContentPage extends Content {
 	private function CreateContentClasses($contents) {
 		
 		$regx = "/[a-zA-Z0-9_]+\:[a-zA-Z0-9_]+|[a-zA-Z0-9_]+/";
+			
 		$content_classes = array();
 		
 		foreach($contents as $content) {

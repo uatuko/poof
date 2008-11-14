@@ -20,7 +20,7 @@ table.m_body {
 	width:100%;
 }
 
-table.m_body td {
+table.m_body td, th {
 	border-width:0.01em;
 	border-color:#F0F0F0;
 	border-style:solid;
