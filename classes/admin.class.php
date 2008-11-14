@@ -22,31 +22,8 @@ class Admin implements RenderInterface {
 	private function GetModulesAdminPage($module_str) {
 		$module = split("/", $module_str, 2);
 		if (!$module[0]) {
-			//$c = new ContentPage("admin-modules", $this->config);
-			//return $c->ReturnHTML();
-
-			/*  --------------------------------
-			 *   FIX ME: Proper Module editing
-			 *  --------------------------------
-			 */
-			$ret = "<ul>";
-			$url_prefix = (new Content("url_prefix", $this->config));
-			$url_prefix = $url_prefix->ReturnRenderedContent();
-
-			$db = new Database($this->config->GetDatabaseConfig());
-			if ($result = $db->ExecuteQuery("SELECT * FROM ".$db->GetDBPrefix()."modules;")) {
-				while ($row = $db->FetchAssoc($result)) {
-					$ret = $ret . "<li><a href=\"".$url_prefix."admin/modules/$row[module_name]\">" . $row['module_name'] . "</a></li>";
-				}
-			}
-			$ret = $ret . "</ul>";
-			return $ret;
-
-			/*  ------------------------------------
-			 *             END FIX ME
-			 *  ------------------------------------
-			 */
-
+			$t = new Table("admin-modules", $this->config);
+			return $t->ReturnRenderedContent();
 		} else {
 			if (class_exists($module[0])) {
 				$module_class = new $module[0]($this->content_id, $this->config);

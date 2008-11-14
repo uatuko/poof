@@ -45,20 +45,73 @@ class Table implements RenderInterface, AdminInterface {
 
 	}
 
+	private function GetTableType() {
+		
+		$table_type = 10;
+		$db = new Database($this->config->GetDatabaseConfig());	
+		$result = $db->ExecuteQuery("SELECT t.`table_type` FROM `sqd_tables` t WHERE t.`table_alias` = '$this->table_alias'; ");
+		if ($row = $db->FetchRow($result)) {
+			$table_type = $row[0];
+		}
+		unset($db);
+
+		return $table_type;		
+	}
+
+	private function CreateContentClasses($contents) {
+		
+		$regx = "/[a-zA-Z0-9_]+\:[a-zA-Z0-9_]+|[a-zA-Z0-9_]+/";
+		$content_classes = array();
+		
+		foreach($contents as $content) {
+			if (preg_match($regx, $content, $matches)) {
+				$arr = split(":", $matches[0]);
+				
+				if (!$arr[1]) {
+					$arr[1] = $arr[0];
+					$arr[0] = "Content";
+				}
+				
+				$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
+			}
+		}
+		return $content_classes;
+	}
+	
+	private function RenderContentClasses(&$content_classes) {
+		
+		$rendered_classes = array();
+		
+		foreach(array_keys($content_classes) as $content_key) {
+			$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
+		}
+		
+		return $rendered_classes;
+	}
+		
+	private function RenderInnerClasses($rendered_table) {
+		
+		$template = new Template($rendered_table, 'string');
+		$content_classes = $this->CreateContentClasses($template->GetContents());
+		$rendered_classes = $this->RenderContentClasses($content_classes);
+		return $template->ParseTemplate($rendered_classes);
+		
+	}
+	
 	public function ReturnRenderedContent() {
 
 		$rendered_content = "";
 
 		$table_template = new TableTemplate($this->GetTableTemplateID(), 'dbase', $this->config);
 		$rendered_content = $table_template->ParseTemplate($this->GetTableContentsArray());
-
 		unset($table_template);
 
+		if ((($this->GetTableType())%10) == 5) {
+			// Process inner classes
+			$rendered_content = $this->RenderInnerClasses($rendered_content);
+		}
+		
 		return $rendered_content;
-		// query and get all the table rows
-		// load a new table template
-		// parse template with query results
-		// return parsed template
 
 	}
 
@@ -66,7 +119,6 @@ class Table implements RenderInterface, AdminInterface {
 		if (isset($_GET['config'])) {
 			switch ($_GET['config']) {
 				case 'add':
-					return $this->ReturnRenderedContent();
 					return "Add new table...";
 					break;
 			}
