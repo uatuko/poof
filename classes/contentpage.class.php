@@ -44,7 +44,7 @@ class ContentPage extends Content {
 
 	private function CreateContentClasses($contents) {
 		
-		$regx = "/[a-zA-Z0-9_]+\:[a-zA-Z0-9_]+|[a-zA-Z0-9_]+/";
+		$regx = "/[a-zA-Z0-9_]+\:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+/";
 			
 		$content_classes = array();
 		
@@ -94,8 +94,13 @@ class ContentPage extends Content {
 		if (isset($_GET['config'])) {
 			switch ($_GET['config']) {
 				case 'add':
-					$f = new Form("contentpage-add-new", $this->config);
-					return $f->ReturnRenderedContent();
+					if (isset($_GET['page']) && $_GET['page'] == 'page') {
+						$f = new Form("contentpage-add-new", $this->config);
+						return $f->ReturnRenderedContent();
+					} else {
+						$f = new Form("contentpage-add-new-named", $this->config);
+						return $f->ReturnRenderedContent();
+					}
 					break;
 			}
 		}

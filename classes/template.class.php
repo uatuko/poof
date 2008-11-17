@@ -3,6 +3,7 @@
 class Template {
 
 	private $template;
+	private $system_template = false;
 	private $contents = array();
 
 	public function __construct($tpl, $tpl_location, $config = null) {
@@ -30,9 +31,10 @@ class Template {
 	private function LoadTemplateDB($tpl_id, $config) {
 		$db = new Database($config->GetDatabaseConfig());
 
-		if ($result = $db->ExecuteQuery("SELECT t.`template` FROM `".$db->GetDBPrefix()."templates` t WHERE t.`template_id` = $tpl_id")) {
+		if ($result = $db->ExecuteQuery("SELECT t.`template`, t.`system_template` FROM `".$db->GetDBPrefix()."templates` t WHERE t.`template_id` = $tpl_id")) {
 			if ($row = $db->FetchAssoc($result)) {
 				$this->template = $row['template'];
+				$this->system_template = (boolean) $row['system_template'];
 			}
 		}
 
@@ -42,6 +44,10 @@ class Template {
 	private function FilterContents() {
 		$regx = "/\{[a-zA-Z0-9_]+\}|\{[a-zA-Z0-9_]+\:[a-zA-Z0-9_]+\}/";
 
+		if ($this->system_template) {
+			$regx = "/\{[a-zA-Z0-9_-]+\}|\{[a-zA-Z0-9_]+\:[a-zA-Z0-9_-]+\}/";
+		}
+		
 		if (preg_match_all($regx, $this->template, $matches)) {
 			$this->contents = $matches[0];
 		}
