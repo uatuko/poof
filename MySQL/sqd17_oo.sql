@@ -149,7 +149,8 @@ INSERT INTO `sqd_contentpage_name_templates` (`page_id`,`name_id`,`template_id`)
  (2,4,7),
  (2,5,8),
  (5,6,10),
- (2,8,12);
+ (2,8,12),
+ (2,7,19);
 /*!40000 ALTER TABLE `sqd_contentpage_name_templates` ENABLE KEYS */;
 
 
@@ -162,7 +163,7 @@ CREATE TABLE `sqd_contentpage_names` (
   `name_id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(40) NOT NULL default '',
   PRIMARY KEY  (`name_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_contentpage_names`
@@ -175,6 +176,7 @@ INSERT INTO `sqd_contentpage_names` (`name_id`,`name`) VALUES
  (4,'contentpage-default'),
  (5,'contentpage-add-new'),
  (6,'user-page'),
+ (7,'javascript-back'),
  (8,'contentpage-save-success');
 /*!40000 ALTER TABLE `sqd_contentpage_names` ENABLE KEYS */;
 
@@ -231,6 +233,7 @@ INSERT INTO `sqd_contentpage_visibility` (`page_id`,`name_id`,`visibility`) VALU
  (2,2,0x01),
  (2,4,0x01),
  (2,5,0x01),
+ (2,7,0x01),
  (2,8,0x01),
  (5,6,0x01);
 /*!40000 ALTER TABLE `sqd_contentpage_visibility` ENABLE KEYS */;
