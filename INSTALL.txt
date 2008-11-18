@@ -1,0 +1,21 @@
+
+Version 0.0.2
+
+Installation
+------------
+
+	+ Requirements
+		- Apache server with URL Rewrite and PHP 5
+		- MySQL 5 server
+		
+	You will find the MySQL DB dump in MySQL/. Restore that to your MySQL server. 
+	
+	Change or create a new configuration file in config/. Make sure you are loading the correct 
+	configuration file in index.php (line 37).
+	
+	Please report all bugz at http://forumz.squad17.com/viewforum.php?f=18&sid=5cf700acdc6adf7cc47fe673b91bab32
+
+	Project URLs
+		- http://www.squad17.org/phpoocmf
+		- http://phpoocmf.sourceforge.net/
+		- http://sourceforge.net/projects/phpoocmf
