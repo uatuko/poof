@@ -19,6 +19,28 @@ table.admin-contentpage th {
 	padding:5px;
 }
 
+table.admin-error {
+	padding:5px;
+	border:1px solid #DD7777;
+	background-color:#FFCCCC;
+	color:#EE5555;
+	width:100%;
+}
+
+table.admin-error td {
+	border:0;
+	text-align:left;
+}
+
 dl.admin-dlist dt,dd {
 	padding:5px;
 }
+
+div.admin-module textarea {
+	width: 600px;
+	height: 400px;
+	border: 1px solid #CCCCCC;
+	padding: 3px;
+}
+
+

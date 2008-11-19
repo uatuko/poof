@@ -2,12 +2,10 @@
 
 class ContentPage extends Content {
 	
-	protected $config;
 	protected $theme;
 	
 	public function __construct($content_id, $config) {
 		parent::__construct($content_id, $config);
-		$this->config = $config;
 		$this->theme = new Theme($config);
 	}
 	

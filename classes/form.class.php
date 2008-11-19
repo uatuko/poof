@@ -37,7 +37,16 @@ class Form implements RenderInterface, AdminInterface {
 	}
 
 	public function ReturnAdminPage() {
-		return "Admin Page [Form]...";
+		if (isset($_GET['config'])) {
+			switch ($_GET['config']) {
+				case 'add':
+					return "Add new form...";
+					break;
+			}
+		}
+
+		$c = new ContentPage("form-default", $this->config);
+		return $c->ReturnRenderedContent();
 	}
 
 }

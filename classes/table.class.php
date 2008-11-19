@@ -124,8 +124,8 @@ class Table implements RenderInterface, AdminInterface {
 			}
 		}
 
-		$c = "<a href=\"/squad17.com/admin/modules/Table/?config=add\">Add new table</a>";
-		return $c;
+		$c = new ContentPage("table-default", $this->config);
+		return $c->ReturnRenderedContent();
 	}
 
 }

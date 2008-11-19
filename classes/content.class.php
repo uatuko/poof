@@ -4,10 +4,12 @@ class Content implements RenderInterface, AdminInterface {
 
 	protected $content_id;
 	protected $db;
+	protected $config;
 
 	public function __construct($content_id, $config) {
 		$this->content_id = $content_id;
 		$this->db = new Database($config->GetDatabaseConfig());
+		$this->config = $config;
 	}
 
 	public function __destruct() {
@@ -43,7 +45,19 @@ class Content implements RenderInterface, AdminInterface {
 	}
 
 	public function ReturnAdminPage() {
-		return "Content::Admin Page";
+
+		if (isset($_GET['config'])) {
+			switch ($_GET['config']) {
+				case 'add':
+					//$f = new Form("contentpage-add-new-named", $this->config);
+					//return $f->ReturnRenderedContent();
+					return "Form...";
+					break;
+			}
+		}
+		
+		$c = new ContentPage("content-default", $this->config);
+		return $c->ReturnRenderedContent();
 	}
 
 }

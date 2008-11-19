@@ -15,7 +15,8 @@ class contentpage_add_new implements FormSubmitInterface {
 		$return = "Error Saving: ";
 
 		if ($_POST['template'] == "") {
-			$return = $return."Template is null";
+			$c = new ContentPage("contentpage-save-error-message", $this->config);
+			$return = $c->ReturnRenderedContent();
 		} else {
 			$db = new Database($this->config->GetDatabaseConfig());
 
