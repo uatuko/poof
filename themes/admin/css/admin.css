@@ -37,10 +37,29 @@ dl.admin-dlist dt,dd {
 }
 
 div.admin-module textarea {
-	width: 600px;
-	height: 400px;
-	border: 1px solid #CCCCCC;
-	padding: 3px;
+	width:600px;
+	height:400px;
+	border:1px solid #C0C0C0;
+	color:#575757;
+	padding:3px;
 }
+
+div.admin-module input.input-submit {
+	border:1px solid #C0C0C0;
+	background-color:#EAEAEA;
+	color:#575757;
+	padding:1px;
+	font-size:12px;
+	width:100px;
+}
+
+div.admin-module input.input-text {
+	border:1px solid #C0C0C0;
+	color:#575757;
+	padding:2px;
+	width:300px;
+}
+
+
 
 

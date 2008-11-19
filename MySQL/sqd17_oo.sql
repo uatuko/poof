@@ -51,6 +51,47 @@ CREATE TABLE `sqd_view_contentpages` (
 );
 
 --
+-- Temporary table structure for view `sqd_view_contents`
+--
+DROP TABLE IF EXISTS `sqd_view_contents`;
+DROP VIEW IF EXISTS `sqd_view_contents`;
+CREATE TABLE `sqd_view_contents` (
+  `content_id` int(11) unsigned,
+  `content_alias` varchar(10),
+  `content_type` tinyint(4) unsigned,
+  `template` text,
+  `local_path` varchar(50)
+);
+
+--
+-- Temporary table structure for view `sqd_view_forms`
+--
+DROP TABLE IF EXISTS `sqd_view_forms`;
+DROP VIEW IF EXISTS `sqd_view_forms`;
+CREATE TABLE `sqd_view_forms` (
+  `form_id` int(11) unsigned,
+  `form_name` varchar(40),
+  `form_method` bit(1),
+  `form_action` varchar(70),
+  `form_type` tinyint(4) unsigned,
+  `form_submit_class` varchar(50),
+  `template` text
+);
+
+--
+-- Temporary table structure for view `sqd_view_tables`
+--
+DROP TABLE IF EXISTS `sqd_view_tables`;
+DROP VIEW IF EXISTS `sqd_view_tables`;
+CREATE TABLE `sqd_view_tables` (
+  `table_id` int(11) unsigned,
+  `table_alias` varchar(40),
+  `table_type` tinyint(4) unsigned,
+  `table_query` text,
+  `template` text
+);
+
+--
 -- Definition of table `sqd_config`
 --
 
@@ -148,9 +189,13 @@ INSERT INTO `sqd_contentpage_name_templates` (`page_id`,`name_id`,`template_id`)
  (2,2,6),
  (2,4,7),
  (2,5,8),
+ (2,12,10),
  (5,6,10),
  (2,8,12),
- (2,7,19);
+ (2,10,17),
+ (2,11,18),
+ (2,7,19),
+ (2,9,20);
 /*!40000 ALTER TABLE `sqd_contentpage_name_templates` ENABLE KEYS */;
 
 
@@ -163,7 +208,7 @@ CREATE TABLE `sqd_contentpage_names` (
   `name_id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(40) NOT NULL default '',
   PRIMARY KEY  (`name_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_contentpage_names`
@@ -177,7 +222,11 @@ INSERT INTO `sqd_contentpage_names` (`name_id`,`name`) VALUES
  (5,'contentpage-add-new'),
  (6,'user-page'),
  (7,'javascript-back'),
- (8,'contentpage-save-success');
+ (8,'contentpage-save-success'),
+ (9,'contentpage-save-error-message'),
+ (10,'content-default'),
+ (11,'table-default'),
+ (12,'form-default');
 /*!40000 ALTER TABLE `sqd_contentpage_names` ENABLE KEYS */;
 
 
@@ -235,6 +284,10 @@ INSERT INTO `sqd_contentpage_visibility` (`page_id`,`name_id`,`visibility`) VALU
  (2,5,0x01),
  (2,7,0x01),
  (2,8,0x01),
+ (2,9,0x01),
+ (2,10,0x01),
+ (2,11,0x01),
+ (2,12,0x01),
  (5,6,0x01);
 /*!40000 ALTER TABLE `sqd_contentpage_visibility` ENABLE KEYS */;
 
@@ -457,7 +510,10 @@ INSERT INTO `sqd_table_templates` (`table_id`,`template_id`) VALUES
  (1,11),
  (2,14),
  (3,15),
- (4,15);
+ (4,15),
+ (5,15),
+ (6,15),
+ (7,15);
 /*!40000 ALTER TABLE `sqd_table_templates` ENABLE KEYS */;
 
 
@@ -473,7 +529,7 @@ CREATE TABLE `sqd_tables` (
   `table_query` text NOT NULL,
   PRIMARY KEY  (`table_id`),
   UNIQUE KEY `table_alias` (`table_alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_tables`
@@ -484,7 +540,10 @@ INSERT INTO `sqd_tables` (`table_id`,`table_alias`,`table_type`,`table_query`) V
  (1,'admin',10,'SELECT m.module_id, m.module_name, CAST(m.enabled as unsigned integer) AS enabled FROM sqd_modules m;'),
  (2,'admin-modules',15,'SELECT module_name FROM sqd_modules;'),
  (3,'contentpage_table_pages',10,'SELECT p.`page_id`, p.`page_alias`, \r\n	CASE p.`template_priority` WHEN 1 THEN \'local-file\'\r\n    	WHEN 0 THEN \'database\' END AS template_priority\r\nFROM `sqd_view_contentpages` p;'),
- (4,'contentpage_table_namedpages',10,'SELECT CONCAT(n.`page_id`, \':\', n.`name_id`) AS name_id,\r\n	n.`page_alias`, n.`name`, \r\n    CASE 1 WHEN 1 THEN \'true\' ELSE \'false\' END AS visibility,\r\n	CASE n.`template_priority` WHEN 1 THEN \'local-file\'\r\n    	WHEN 0 THEN \'database\' END AS template_priority\r\nFROM `sqd_view_contentpage_names` n;');
+ (4,'contentpage_table_namedpages',10,'SELECT CONCAT(n.`page_id`, \':\', n.`name_id`) AS name_id,\r\n	n.`page_alias`, n.`name`, \r\n    CASE 1 WHEN 1 THEN \'true\' ELSE \'false\' END AS visibility,\r\n	CASE n.`template_priority` WHEN 1 THEN \'local-file\'\r\n    	WHEN 0 THEN \'database\' END AS template_priority\r\nFROM `sqd_view_contentpage_names` n;'),
+ (5,'content-table',10,'SELECT c.`content_id`, c.`content_alias`, c.`content_type`, c.`local_path` FROM `sqd_view_contents` c;'),
+ (6,'table-table',10,'SELECT t.`table_id`, t.`table_alias`, t.`table_type`, t.`table_query` FROM `sqd_view_tables` t;'),
+ (7,'form-table',10,'SELECT f.`form_id`, f.`form_name`, \r\n	CASE f.`form_method`\r\n    	WHEN 1 THEN \'POST\'\r\n        ELSE \'GET\' END AS form_method, \r\n    f.`form_type`, f.`form_submit_class`, f.`form_action` \r\nFROM `sqd_view_forms` f;');
 /*!40000 ALTER TABLE `sqd_tables` ENABLE KEYS */;
 
 
@@ -499,7 +558,7 @@ CREATE TABLE `sqd_templates` (
   `system_template` bit(1) NOT NULL default '\0',
   `template` text NOT NULL,
   PRIMARY KEY  (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_templates`
@@ -511,23 +570,25 @@ INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`t
  (2,'url-prefix',0x01,'/squad17.com/');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
  (3,'3',0x00,'{menu}'),
- (4,'admin-template',0x01,'{Admin:admin}'),
+ (4,'admin-template',0x01,'<div class=\"admin-module\">\r\n{Admin:admin}\r\n</div>'),
  (5,'5',0x00,'<a href=\"{url_prefix}admin/modules\">Modules</a>'),
  (6,'6',0x00,'Default Modules Page <br /> Wil be listing all the configurable modules...'),
  (7,'contentpage-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Content Pages</b> - <a href=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Content Page ID</th><th>Page URL (Alias)</th><th>Template Priority</th></tr>\r\n{Table:contentpage_table_pages}\r\n</table>\r\n</dd>\r\n<dt><b>Named Content Pages</b> - <a href=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Named ID</th><th>Page URL (Alias)</th><th>Content Page Name</th><th>Visibility</th><th>Template Priority</th></tr>\r\n{Table:contentpage_table_namedpages}\r\n</table>\r\n</dd>\r\n<dt><a href=\"javascript:history.go(-1);\">&lt;&lt; back</a></dt>\r\n</dl>'),
- (8,'contentpage-add-new-named',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" /></td></tr>\r\n<tr><td>Page name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"page-name\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" /></td></tr>\r\n</table>\r\n</form>');
+ (8,'contentpage-add-new-named',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text\" /></td></tr>\r\n<tr><td>Page name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"page-name\" class=\"input-text\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
- (10,'10',0x00,'User - Page template'),
+ (10,'form-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Forms</b> - <a href=\"{url_prefix}admin/modules/Form/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Form ID</th><th>Form Name</th><th>Form Method</th><th>Form Type</th><th>Form Submit Class</th><th>Form Action</th></tr>\r\n{Table:form-table}\r\n</table>\r\n</dd>\r\n<dt><a href=\"javascript:history.go(-1);\">&lt;&lt; back</a></dt>\r\n</dl>'),
  (11,'11',0x00,'<table>\r\n[row]\r\n<tr>\r\n[cell]<td>{cell}</td>[/cell]\r\n</tr>\r\n[/row]\r\n</table>'),
  (12,'contentpage-save-success',0x01,'<table>\r\n<tr><td>Content Page saved successfully</td></tr>\r\n<tr><td><a href=\"{url_prefix}admin/modules/ContentPage/\">Back</a> to Content Page Administration</td></tr>\r\n</table>'),
  (13,'13',0x00,'[row]\r\n<ul>\r\n[cell] \r\n<li> {cell} \r\n</li>\r\n[/cell]\r\n</ul>\r\n\r\n[/row]'),
  (14,'14',0x00,'<ul>\r\n[row]<li>[cell]<a href=\"{url_prefix}admin/modules/{cell}\">{cell}</a>[/cell]</li>[/row]\r\n</ul>'),
- (15,'contentpage-tables',0x01,'[row]<tr>[cell]<td>{cell}</td>[/cell]</tr>[/row]'),
- (16,'contentpage-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" /></td></tr>\r\n</table>\r\n</form>'),
- (17,'template',0x00,'This is a template');
+ (15,'contentpage-tables',0x01,'[row]<tr>[cell]<td>{cell}</td>[/cell]</tr>[/row]');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
- (18,'template',0x00,'Another template'),
- (19,'javascript-back',0x01,'<a href=\"javascript:history.go(-1);\">&lt;&lt; back</a>');
+ (16,'contentpage-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
+ (17,'content-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Contents</b> - <a href=\"{url_prefix}admin/modules/Content/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Content ID</th><th>Content Alias</th><th>Content Type</th><th>Local Template Path</th></tr>\r\n{Table:content-table}\r\n</table>\r\n</dd>\r\n<dt><a href=\"javascript:history.go(-1);\">&lt;&lt; back</a></dt>\r\n</dl>'),
+ (18,'table-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Tables</b> - <a href=\"{url_prefix}admin/modules/Table/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Table ID</th><th>Table Alias</th><th>Table Type</th><th>Table Query</th></tr>\r\n{Table:table-table}\r\n</table>\r\n</dd>\r\n<dt><a href=\"javascript:history.go(-1);\">&lt;&lt; back</a></dt>\r\n</dl>');
+INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
+ (19,'javascript-back',0x01,'<a href=\"javascript:history.go(-1);\">&lt;&lt; back</a>'),
+ (20,'admin-error',0x01,'<table class=\"admin-error\">\r\n	<tr><td>Error Message</td></tr>\r\n</table>');
 /*!40000 ALTER TABLE `sqd_templates` ENABLE KEYS */;
 
 
@@ -873,6 +934,30 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd
 DROP TABLE IF EXISTS `sqd_view_contentpages`;
 DROP VIEW IF EXISTS `sqd_view_contentpages`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd_view_contentpages` AS select `c`.`page_id` AS `page_id`,`c`.`page_alias` AS `page_alias`,`c`.`template_priority` AS `template_priority`,`t`.`template_id` AS `template_id`,`t`.`template` AS `template` from ((`sqd_contentpages` `c` join `sqd_contentpage_templates` `ct` on((`c`.`page_id` = `ct`.`page_id`))) join `sqd_templates` `t` on((`t`.`template_id` = `ct`.`template_id`)));
+
+--
+-- Definition of view `sqd_view_contents`
+--
+
+DROP TABLE IF EXISTS `sqd_view_contents`;
+DROP VIEW IF EXISTS `sqd_view_contents`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd_view_contents` AS select `c`.`content_id` AS `content_id`,`c`.`content_alias` AS `content_alias`,`c`.`content_type` AS `content_type`,`t`.`template` AS `template`,`p`.`local_path` AS `local_path` from (((`sqd_contents` `c` join `sqd_content_templates` `ct` on((`c`.`content_id` = `ct`.`content_id`))) join `sqd_templates` `t` on((`ct`.`template_id` = `t`.`template_id`))) left join `sqd_content_local_paths` `p` on((`c`.`content_id` = `p`.`content_id`)));
+
+--
+-- Definition of view `sqd_view_forms`
+--
+
+DROP TABLE IF EXISTS `sqd_view_forms`;
+DROP VIEW IF EXISTS `sqd_view_forms`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd_view_forms` AS select `f`.`form_id` AS `form_id`,`f`.`form_name` AS `form_name`,`f`.`form_method` AS `form_method`,`f`.`form_action` AS `form_action`,`f`.`form_type` AS `form_type`,`f`.`form_submit_class` AS `form_submit_class`,`t`.`template` AS `template` from ((`sqd_forms` `f` join `sqd_form_templates` `Ft` on((`f`.`form_id` = `ft`.`form_id`))) join `sqd_templates` `t` on((`ft`.`template_id` = `t`.`template_id`)));
+
+--
+-- Definition of view `sqd_view_tables`
+--
+
+DROP TABLE IF EXISTS `sqd_view_tables`;
+DROP VIEW IF EXISTS `sqd_view_tables`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd_view_tables` AS select `t`.`table_id` AS `table_id`,`t`.`table_alias` AS `table_alias`,`t`.`table_type` AS `table_type`,`t`.`table_query` AS `table_query`,`te`.`template` AS `template` from ((`sqd_tables` `t` join `sqd_table_templates` `tt` on((`t`.`table_id` = `tt`.`table_id`))) join `sqd_templates` `te` on((`tt`.`template_id` = `te`.`template_id`)));
 
 
 
