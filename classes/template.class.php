@@ -67,7 +67,9 @@ class Template {
 	public function ParseTemplate($rendered_contents) {
 		$parsed = $this->template;
 		foreach ($this->contents as $content) {
-			$parsed = str_replace($content, $rendered_contents[$content], $parsed);
+			if ($rendered_contents[$content]) {
+				$parsed = str_replace($content, $rendered_contents[$content], $parsed);
+			}
 		}
 		return $parsed;
 	}

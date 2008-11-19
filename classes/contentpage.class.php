@@ -73,11 +73,19 @@ class ContentPage extends Content {
 	}
 
 	
-	public function ReturnRenderedContent() {
+	public function ReturnRenderedContent(&$rendered_values = null) {
 
+		$rendered_template = "";
+		
 		if ($template = $this->GetContentPageTemplate()) {
+
 			$content_classes = array();
 			$rendered_classes = array();
+			
+			if (isset($rendered_values)) {
+				$rendered_template = $template->ParseTemplate($rendered_values);
+				$template = new Template($rendered_template, 'string');
+			}
 			
 			$content_classes = $this->CreateContentClasses($template->GetContents());
 			$rendered_classes = $this->RenderContentClasses($content_classes);

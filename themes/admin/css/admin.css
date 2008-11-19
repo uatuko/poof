@@ -20,7 +20,8 @@ table.admin-contentpage th {
 }
 
 table.admin-error {
-	padding:5px;
+	padding:2px;
+	margin:10px 0px 5px 0px;;
 	border:1px solid #DD7777;
 	background-color:#FFCCCC;
 	color:#EE5555;
@@ -28,6 +29,20 @@ table.admin-error {
 }
 
 table.admin-error td {
+	border:0;
+	text-align:left;
+}
+
+table.admin-message {
+	padding:2px;
+	margin:5px 0px 15px 0px;
+	border:1px solid #575757;
+	background-color:#EAEAEA;
+	color:#6C6C6C;
+	width:100%;
+}
+
+table.admin-message td {
 	border:0;
 	text-align:left;
 }

@@ -14,13 +14,49 @@ class Form implements RenderInterface, AdminInterface {
 		// Destructor
 	}
 
+	private function CreateContentClasses($contents) {
+		
+		$regx = "/[a-zA-Z0-9_]+\:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+/";
+		$content_classes = array();
+		
+		foreach($contents as $content) {
+			if (preg_match($regx, $content, $matches)) {
+				$arr = split(":", $matches[0]);
+				
+				if (!$arr[1]) {
+					$arr[1] = $arr[0];
+					$arr[0] = "Content";
+				}
+				
+				$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
+			}
+		}
+		return $content_classes;
+	}
+	
+	private function RenderContentClasses(&$content_classes) {
+		
+		$rendered_classes = array();
+		
+		foreach(array_keys($content_classes) as $content_key) {
+			$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
+		}
+		
+		return $rendered_classes;
+	}
+	
 	public function ReturnRenderedContent() {
 
 		$return = "";
 		$db = new Form_Database($this->config);
 
 		if (!isset($_POST['submit'])) {
-			$return = $db->GetFormTemplate($this->content_id);
+			if ($return = $db->GetFormTemplate($this->content_id)) {
+				$t = new Template($return, 'string');
+				$content_classes = $this->CreateContentClasses($t->GetContents());
+				$rendered_classes = $this->RenderContentClasses($content_classes);
+				$return = $t->ParseTemplate($rendered_classes);
+			}
 		} else {
 			$class_name = $db->GetFormSubmitClass($this->content_id);
 
