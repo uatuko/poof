@@ -73,7 +73,7 @@ class ContentPage extends Content {
 	}
 
 	
-	public function ReturnRenderedContent(&$rendered_values = null) {
+	public function ReturnRenderedContent(&$rendered_values = null, $override = false) {
 
 		$rendered_template = "";
 		
@@ -83,7 +83,7 @@ class ContentPage extends Content {
 			$rendered_classes = array();
 			
 			if (isset($rendered_values)) {
-				$rendered_template = $template->ParseTemplate($rendered_values);
+				$rendered_template = $template->ParseTemplate($rendered_values, $override);
 				$template = new Template($rendered_template, 'string');
 			}
 			

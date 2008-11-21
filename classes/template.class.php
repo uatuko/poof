@@ -18,6 +18,7 @@ class Template {
 			case 'string':
 			default:
 				$this->template = $tpl;
+				$this->system_template = true;
 		}
 
 		$this->FilterContents();
@@ -64,10 +65,11 @@ class Template {
 		return $this->contents;
 	}
 
-	public function ParseTemplate($rendered_contents) {
+	// by default replace all contents
+	public function ParseTemplate($rendered_contents, $override = true) {
 		$parsed = $this->template;
 		foreach ($this->contents as $content) {
-			if ($rendered_contents[$content]) {
+			if ($rendered_contents[$content] || $override) {
 				$parsed = str_replace($content, $rendered_contents[$content], $parsed);
 			}
 		}

@@ -22,8 +22,8 @@ class Admin implements RenderInterface {
 	private function GetModulesAdminPage($module_str) {
 		$module = split("/", $module_str, 2);
 		if (!$module[0]) {
-			$t = new Table("admin-modules", $this->config);
-			return $t->ReturnRenderedContent();
+			$c = new ContentPage("admin-modules", $this->config);
+			return $c->ReturnRenderedContent();
 		} else {
 			if (class_exists($module[0])) {
 				$module_class = new $module[0]($this->content_id, $this->config);

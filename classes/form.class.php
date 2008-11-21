@@ -45,7 +45,7 @@ class Form implements RenderInterface, AdminInterface {
 		return $rendered_classes;
 	}
 	
-	public function ReturnRenderedContent() {
+	public function ReturnRenderedContent(&$rendered_values = null, $override = false) {
 
 		$return = "";
 		$db = new Form_Database($this->config);
@@ -53,6 +53,12 @@ class Form implements RenderInterface, AdminInterface {
 		if (!isset($_POST['submit'])) {
 			if ($return = $db->GetFormTemplate($this->content_id)) {
 				$t = new Template($return, 'string');
+
+				if (isset($rendered_values)) {
+					$rendered_template = $t->ParseTemplate($rendered_values, $override);
+					$t = new Template($rendered_template, 'string');
+				}
+				
 				$content_classes = $this->CreateContentClasses($t->GetContents());
 				$rendered_classes = $this->RenderContentClasses($content_classes);
 				$return = $t->ParseTemplate($rendered_classes);
