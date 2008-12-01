@@ -66,10 +66,10 @@ class Template {
 	}
 
 	// by default replace all contents
-	public function ParseTemplate($rendered_contents, $override = true) {
+	public function ParseTemplate(&$rendered_contents, $override = true) {
 		$parsed = $this->template;
 		foreach ($this->contents as $content) {
-			if ($rendered_contents[$content] || $override) {
+			if (isset($rendered_contents[$content]) || $override) {
 				$parsed = str_replace($content, $rendered_contents[$content], $parsed);
 			}
 		}

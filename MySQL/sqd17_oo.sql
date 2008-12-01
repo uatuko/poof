@@ -188,11 +188,13 @@ INSERT INTO `sqd_contentpage_name_templates` (`page_id`,`name_id`,`template_id`)
  (2,7,4),
  (2,1,20),
  (2,2,22),
- (2,9,29),
  (2,10,30),
+ (2,20,38),
+ (2,19,39),
  (2,4,40),
  (2,5,46),
  (2,8,48),
+ (2,9,49),
  (2,11,60),
  (2,12,70),
  (5,6,70);
@@ -208,7 +210,7 @@ CREATE TABLE `sqd_contentpage_names` (
   `name_id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(40) NOT NULL default '',
   PRIMARY KEY  (`name_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_contentpage_names`
@@ -226,7 +228,9 @@ INSERT INTO `sqd_contentpage_names` (`name_id`,`name`) VALUES
  (9,'contentpage-save-error-message'),
  (10,'content-default'),
  (11,'table-default'),
- (12,'form-default');
+ (12,'form-default'),
+ (19,'content-save-error-message'),
+ (20,'content-save-success');
 /*!40000 ALTER TABLE `sqd_contentpage_names` ENABLE KEYS */;
 
 
@@ -288,6 +292,8 @@ INSERT INTO `sqd_contentpage_visibility` (`page_id`,`name_id`,`visibility`) VALU
  (2,10,0x01),
  (2,11,0x01),
  (2,12,0x01),
+ (2,19,0x01),
+ (2,20,0x01),
  (5,6,0x01);
 /*!40000 ALTER TABLE `sqd_contentpage_visibility` ENABLE KEYS */;
 
@@ -429,6 +435,8 @@ CREATE TABLE `sqd_form_templates` (
 
 /*!40000 ALTER TABLE `sqd_form_templates` DISABLE KEYS */;
 INSERT INTO `sqd_form_templates` (`form_id`,`template_id`) VALUES 
+ (5,31),
+ (6,32),
  (1,44),
  (3,45),
  (2,46),
@@ -449,7 +457,7 @@ CREATE TABLE `sqd_forms` (
   `form_type` tinyint(4) unsigned NOT NULL default '10',
   `form_submit_class` varchar(50) default NULL,
   PRIMARY KEY  (`form_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_forms`
@@ -460,7 +468,9 @@ INSERT INTO `sqd_forms` (`form_id`,`form_name`,`form_method`,`form_action`,`form
  (1,'contentpage-add-new',0x01,NULL,10,'contentpage_add_new'),
  (2,'contentpage-add-new-named',0x01,NULL,10,'contentpage_add_new'),
  (3,'contentpage-add-new-error',0x01,NULL,10,'contentpage_add_new'),
- (4,'contentpage-add-new-named-error',0x01,NULL,10,'contentpage_add_new');
+ (4,'contentpage-add-new-named-error',0x01,NULL,10,'contentpage_add_new'),
+ (5,'content-add-new',0x01,NULL,10,'content_add_new'),
+ (6,'content-add-new-error',0x01,NULL,10,'content_add_new');
 /*!40000 ALTER TABLE `sqd_forms` ENABLE KEYS */;
 
 
@@ -562,7 +572,7 @@ CREATE TABLE `sqd_templates` (
   `system_template` bit(1) NOT NULL default '\0',
   `template` text NOT NULL,
   PRIMARY KEY  (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=302 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_templates`
@@ -581,17 +591,25 @@ INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`t
  (20,'admin-default',0x01,'<a href=\"{url_prefix}admin/modules\">Modules</a>'),
  (21,'admin-template',0x01,'<div class=\"admin-module\">\r\n{Admin:admin}\r\n</div>'),
  (22,'admin-modules',0x01,'{Table:admin-modules}'),
- (29,'admin-error',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>\r\n<table class=\"admin-message\">\r\n	<tr><td>Navigate to <a href=\"{url_prefix}admin/modules/ContentPage\">Content Page</a></td></tr>\r\n</table>'),
- (30,'content-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Contents</b> - <a href=\"{url_prefix}admin/modules/Content/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Content ID</th><th>Content Alias</th><th>Content Type</th><th>Local Template Path</th></tr>\r\n{Table:content-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>');
+ (28,'admin-message',0x01,'<table class=\"admin-message\">\r\n	<tr><td>{user-message}</td></tr>\r\n</table>'),
+ (29,'admin-error',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>'),
+ (30,'content-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Contents</b> - <a href=\"{url_prefix}admin/modules/Content/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Content ID</th><th>Content Alias</th><th>Content Type</th><th>Local Template Path</th></tr>\r\n{Table:content-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
+ (31,'content-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Content/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Content Alias:</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Content Type:</td></tr>\r\n<tr><td>\r\n<select name=\"content-type\" class=\"input-select no-error\">\r\n<option value=\"11\">Static - Local</option>\r\n<option value=\"12\">Static - DB</option>\r\n</select>\r\n</td></tr>\r\n<tr><td>Content Local Path:</td></tr>\r\n<tr><td><input type=\"text\" name=\"content-local-path\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Or, Content Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
+ (32,'content-add-new-error',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Content/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Content Alias:</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text {alias-error}\" value=\"{alias-value}\" /></td></tr>\r\n<tr><td>Content Type:</td></tr>\r\n<tr><td>\r\n<select name=\"content-type\" class=\"input-select {type-error}\">\r\n<option value=\"11\" {type-11-selected}>Static - Local</option>\r\n<option value=\"12\" {type-12-selected}>Static - DB</option>\r\n</select>\r\n</td></tr>\r\n<tr><td>Content Local Path:</td></tr>\r\n<tr><td><input type=\"text\" name=\"content-local-path\" class=\"input-text {path-error}\" value=\"{path-value}\"/></td></tr>\r\n<tr><td>Or, Content Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"{template-error}\">{template-value}</textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
+ (38,'content-save-success',0x01,'<table class=\"admin-message\">\r\n<tr><td>\r\n	Content saved successfully. <br /><br />\r\n	Navigate to <a href=\"{url_prefix}admin/modules/Content/\">Content</a>\r\n</td></tr>\r\n</table>');
+INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
+ (39,'content-save-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>\r\n<table class=\"admin-message\">\r\n	<tr><td>Navigate to <a href=\"{url_prefix}admin/modules/Content\">Content</a></td></tr>\r\n</table>'),
  (40,'contentpage-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Content Pages</b> - <a href=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Content Page ID</th><th>Page URL (Alias)</th><th>Template Priority</th></tr>\r\n{Table:contentpage_table_pages}\r\n</table>\r\n</dd>\r\n<dt><b>Named Content Pages</b> - <a href=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Named ID</th><th>Page URL (Alias)</th><th>Content Page Name</th><th>Visibility</th><th>Template Priority</th></tr>\r\n{Table:contentpage_table_namedpages}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
- (41,'contentpage-tables',0x01,'[row]<tr>[cell]<td>{cell}</td>[/cell]</tr>[/row]'),
- (44,'contentpage-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
- (45,'contentpage-add-new-error',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text {alias-error}\" value=\"{alias-value}\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"{template-error}\">{template-value}</textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>');
+ (41,'contentpage-tables',0x01,'[row]<tr>[cell]<td>{cell}</td>[/cell]</tr>[/row]');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
- (46,'contentpage-add-new-named',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"page-name\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
+ (44,'contentpage-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
+ (45,'contentpage-add-new-error',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text {alias-error}\" value=\"{alias-value}\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"{template-error}\">{template-value}</textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
+ (46,'contentpage-add-new-named',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"page-name\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>');
+INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
  (47,'contentpage-add-new-named-error',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text {alias-error}\" value=\"{alias-value}\" /></td></tr>\r\n<tr><td>Page name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"page-name\" class=\"input-text {name-error}\" value=\"{name-value}\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"{template-error}\">{template-value}</textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
- (48,'contentpage-save-success',0x01,'<table>\r\n<tr><td>Content Page saved successfully</td></tr>\r\n<tr><td>Navigate to <a href=\"{url_prefix}admin/modules/ContentPage/\">Content Page</a></td></tr>\r\n</table>');
+ (48,'contentpage-save-success',0x01,'<table class=\"admin-message\">\r\n<tr><td>\r\n	Content Page saved successfully. <br /><br />\r\n	Navigate to <a href=\"{url_prefix}admin/modules/ContentPage/\">Content Page</a>\r\n</td></tr>\r\n</table>'),
+ (49,'contentpage-save-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>\r\n<table class=\"admin-message\">\r\n	<tr><td>Navigate to <a href=\"{url_prefix}admin/modules/ContentPage\">Content Page</a></td></tr>\r\n</table>');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
  (60,'table-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Tables</b> - <a href=\"{url_prefix}admin/modules/Table/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Table ID</th><th>Table Alias</th><th>Table Type</th><th>Table Query</th></tr>\r\n{Table:table-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
  (70,'form-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Forms</b> - <a href=\"{url_prefix}admin/modules/Form/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Form ID</th><th>Form Name</th><th>Form Method</th><th>Form Type</th><th>Form Submit Class</th><th>Form Action</th></tr>\r\n{Table:form-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>');
@@ -621,6 +639,91 @@ INSERT INTO `sqd_themes` (`theme_id`,`theme_name`) VALUES
 
 
 --
+-- Definition of procedure `sqd_addContent`
+--
+
+DROP PROCEDURE IF EXISTS `sqd_addContent`;
+
+DELIMITER $$
+
+/*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='' */ $$
+CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_addContent`(IN _alias VARCHAR(40), IN _type TINYINT(4), IN _path VARCHAR(50), IN _template TEXT, OUT _RETURNCODE TINYINT)
+BEGIN
+
+DECLARE intTMP INT DEFAULT 0;
+
+DECLARE intContentID INT DEFAULT 0;
+DECLARE intTPLID INT DEFAULT 0;
+
+DECLARE EXIT HANDLER FOR NOT FOUND ROLLBACK;
+DECLARE EXIT HANDLER FOR SQLEXCEPTION ROLLBACK;
+DECLARE EXIT HANDLER FOR SQLWARNING ROLLBACK;
+
+SET `_RETURNCODE` = 1;
+
+/* RETURN CODES
+   1 - Not Successfull
+   0 - Saved successfully
+   10 - Alias Exists
+   20 - Type->Local but Path->''
+   30 - Type->DB but Template->''
+*/
+
+SET intTMP = (SELECT c.`content_id` FROM sqd_contents c 
+				WHERE c.`content_alias` = `_alias`);
+
+IF intTMP > 0 THEN
+	SET `_RETURNCODE` = 10;
+ELSE
+	IF `_type` = 11 THEN
+    	IF `_path` = '' THEN
+        	SET `_RETURNCODE` = 20;
+        ELSE
+        	START TRANSACTION;
+            
+            INSERT INTO sqd_contents(`content_alias`, `content_type`)
+            	VALUES(`_alias`, `_type`);
+                
+            SET intContentID = LAST_INSERT_ID();
+            
+            INSERT INTO `sqd_content_local_paths`(`content_id`, `local_path`)
+            	VALUES(intContentID, `_path`);
+            
+            COMMIT;
+            SET `_RETURNCODE` = 0;
+        END IF;
+    END IF;
+    
+	IF `_type` = 12 THEN
+    	IF `_template` = '' THEN
+        	SET `_RETURNCODE` = 30;
+        ELSE
+        	START TRANSACTION;
+            
+            INSERT INTO sqd_contents(`content_alias`, `content_type`)
+            	VALUES(`_alias`, `_type`);
+                
+            SET intContentID = LAST_INSERT_ID();
+            
+            INSERT INTO `sqd_templates`(`template`) VALUES(`_template`);
+			SET intTPLID = LAST_INSERT_ID();
+            
+            INSERT INTO `sqd_content_templates`(`content_id`, `template_id`)
+            	VALUES(intContentID, intTPLID);
+                
+            COMMIT;
+            SET `_RETURNCODE` = 0;
+        END IF;
+    END IF;
+END IF;
+
+
+END $$
+/*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
+
+DELIMITER ;
+
+--
 -- Definition of procedure `sqd_addNamedContentPage`
 --
 
@@ -631,8 +734,6 @@ DELIMITER $$
 /*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='' */ $$
 CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_addNamedContentPage`(IN _alias VARCHAR(40), IN _name VARCHAR(40), IN _template TEXT, OUT _RETURNCODE TINYINT)
 BEGIN
-
-
 
 DECLARE intTMP INT DEFAULT 0;
 
@@ -742,7 +843,7 @@ IF intTMP > 0 THEN
     SET `_RETURNCODE` = 20;
 ELSE
     START TRANSACTION;
-        
+   
     IF NOT `_alias` = '' THEN
     	IF NOT intPageID > 0 THEN
         	INSERT INTO `sqd_contentpages`(`page_alias`) VALUES(`_alias`);

@@ -49,9 +49,9 @@ class Content implements RenderInterface, AdminInterface {
 		if (isset($_GET['config'])) {
 			switch ($_GET['config']) {
 				case 'add':
-					//$f = new Form("contentpage-add-new-named", $this->config);
-					//return $f->ReturnRenderedContent();
-					return "Form...";
+					$f = new Form("content-add-new", $this->config);
+					return $f->ReturnRenderedContent();
+					//return "Form...";
 					break;
 			}
 		}
