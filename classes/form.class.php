@@ -53,15 +53,26 @@ class Form implements RenderInterface, AdminInterface {
 		if (!isset($_POST['submit'])) {
 			if ($return = $db->GetFormTemplate($this->content_id)) {
 				$t = new Template($return, 'string');
-
+		
 				if (isset($rendered_values)) {
-					$rendered_template = $t->ParseTemplate($rendered_values, $override);
+					$contents = $t->GetContents();
+					foreach ($contents as $key => $content) {
+						if (isset($rendered_values[$content])) {
+							unset($contents[$key]);
+						}
+					}
+					
+					$content_classes = $this->CreateContentClasses($contents);
+					$rendered_classes = $this->RenderContentClasses($content_classes);
+					$rendered_template = $t->ParseTemplate($rendered_classes, $override);
+					
 					$t = new Template($rendered_template, 'string');
+					$return = $t->ParseTemplate($rendered_values);
+				} else {
+					$content_classes = $this->CreateContentClasses($t->GetContents());
+					$rendered_classes = $this->RenderContentClasses($content_classes);
+					$return = $t->ParseTemplate($rendered_classes);					
 				}
-				
-				$content_classes = $this->CreateContentClasses($t->GetContents());
-				$rendered_classes = $this->RenderContentClasses($content_classes);
-				$return = $t->ParseTemplate($rendered_classes);
 			}
 		} else {
 			$class_name = $db->GetFormSubmitClass($this->content_id);
