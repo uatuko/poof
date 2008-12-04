@@ -1,10 +1,11 @@
 
-Version 0.0.3
+Version 0.0.4
 
 Release Notes
 -------------
 	
-	Completed and fully functional ContentPage module.
+	Completed and beta test release of Content module.
+	Bug fixes in Form module engine.
 	
 
 Installation
