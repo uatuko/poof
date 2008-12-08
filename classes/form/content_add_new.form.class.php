@@ -33,7 +33,7 @@ class content_add_new implements FormSubmitInterface {
 		
 		$db = new Database($this->config->GetDatabaseConfig());
 
-		if ($db->ExecuteMultiQuery("CALL sqd_addContent('".$_POST['alias']."', '".$_POST['content-type']."', '".$_POST['content-local-path']."', '".$_POST['template']."', @x); SELECT @x;")) {
+		if ($db->ExecuteMultiQuery("CALL ".$db->GetDBPrefix()."addContent('".$_POST['alias']."', '".$_POST['content-type']."', '".$_POST['content-local-path']."', '".$_POST['template']."', @x); SELECT @x;")) {
 			$db->MultiQueryNextResult();
 			if ($result = $db->MultiQueryFetchResults()) {
 				$row = $db->FetchRow($result);

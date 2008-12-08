@@ -19,7 +19,7 @@ class Table implements RenderInterface, AdminInterface {
 		$table_contents = array();
 		$db = new Database($this->config->GetDatabaseConfig());
 
-		$table_result = $db->ExecuteQuery("SELECT `table_query` FROM `sqd_tables` WHERE `table_alias` = '$this->table_alias';");
+		$table_result = $db->ExecuteQuery("SELECT `table_query` FROM `".$db->GetDBPrefix()."tables` WHERE `table_alias` = '$this->table_alias';");
 		if ($table_query = $db->FetchRow($table_result)) {
 			$sql_query = $table_query[0];
 			$table_contents = $db->ExecuteSQLQuery($sql_query);
@@ -35,7 +35,7 @@ class Table implements RenderInterface, AdminInterface {
 		$template_id = 0;
 
 		$db = new Database($this->config->GetDatabaseConfig());
-		$result = $db->ExecuteQuery("SELECT t.`template_id` FROM `sqd_table_templates` t INNER JOIN `sqd_tables` s ON t.`table_id` = s.`table_id` WHERE s.`table_alias` = '$this->table_alias'; ");
+		$result = $db->ExecuteQuery("SELECT t.`template_id` FROM `".$db->GetDBPrefix()."table_templates` t INNER JOIN `sqd_tables` s ON t.`table_id` = s.`table_id` WHERE s.`table_alias` = '$this->table_alias'; ");
 		if ($row = $db->FetchRow($result)) {
 			$template_id = $row[0];
 		}
@@ -49,7 +49,7 @@ class Table implements RenderInterface, AdminInterface {
 		
 		$table_type = 10;
 		$db = new Database($this->config->GetDatabaseConfig());	
-		$result = $db->ExecuteQuery("SELECT t.`table_type` FROM `sqd_tables` t WHERE t.`table_alias` = '$this->table_alias'; ");
+		$result = $db->ExecuteQuery("SELECT t.`table_type` FROM `".$db->GetDBPrefix()."tables` t WHERE t.`table_alias` = '$this->table_alias'; ");
 		if ($row = $db->FetchRow($result)) {
 			$table_type = $row[0];
 		}

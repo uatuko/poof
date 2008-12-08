@@ -43,7 +43,7 @@ class contentpage_add_new implements FormSubmitInterface {
 		} else {
 			$db = new Database($this->config->GetDatabaseConfig());
 
-			if ($db->ExecuteMultiQuery("CALL sqd_amendNamedContentPage('".$_POST['alias']."', '".$_POST['page-name']."', '".$_POST['template']."', @x); SELECT @x;")) {
+			if ($db->ExecuteMultiQuery("CALL ".$db->GetDBPrefix()."amendNamedContentPage('".$_POST['alias']."', '".$_POST['page-name']."', '".$_POST['template']."', @x); SELECT @x;")) {
 				$db->MultiQueryNextResult();
 				if ($result = $db->MultiQueryFetchResults()) {
 					$row = $db->FetchRow($result);

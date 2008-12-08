@@ -122,10 +122,9 @@ class Form_Database extends Database {
 
 		$return = false;
 
-		if ($result = $this->ExecuteQuery("SELECT t.`template` FROM `sqd_forms` f INNER JOIN `sqd_form_templates` ft ON
-			f.`form_id` = ft.`form_id` INNER JOIN `sqd_templates` t ON
-	    	ft.`template_id` = t.`template_id` WHERE f.`form_name` = '$form_name';")) {
-			if ($row = $this->FetchRow($result)) {
+		if ($this->ExecuteMultiQuery("CALL ".$this->GetDBPrefix()."getFormTemplate('$form_name');")) {
+			if ($result = $this->MultiQueryFetchResults()) {
+				$row = $this->FetchRow($result);
 				$return = $row[0];
 			}
 		}
@@ -136,7 +135,7 @@ class Form_Database extends Database {
 
 	public function GetFormSubmitClass($form_name) {
 		$return = false;
-		if ($result = $this->ExecuteQuery("SELECT f.`form_submit_class` FROM `sqd_forms` f WHERE f.`form_name` = '$form_name';")) {
+		if ($result = $this->ExecuteQuery("SELECT f.`form_submit_class` FROM `".$this->GetDBPrefix()."forms` f WHERE f.`form_name` = '$form_name';")) {
 			if ($row = $this->FetchRow($result)) {
 				$return = $row[0];
 			}
