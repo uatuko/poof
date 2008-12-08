@@ -188,6 +188,7 @@ INSERT INTO `sqd_contentpage_name_templates` (`page_id`,`name_id`,`template_id`)
  (2,7,4),
  (2,1,20),
  (2,2,22),
+ (2,3,29),
  (2,10,30),
  (2,20,38),
  (2,19,39),
@@ -196,8 +197,10 @@ INSERT INTO `sqd_contentpage_name_templates` (`page_id`,`name_id`,`template_id`)
  (2,8,48),
  (2,9,49),
  (2,11,60),
+ (2,21,69),
  (2,12,70),
- (5,6,70);
+ (5,6,70),
+ (2,22,79);
 /*!40000 ALTER TABLE `sqd_contentpage_name_templates` ENABLE KEYS */;
 
 
@@ -210,7 +213,7 @@ CREATE TABLE `sqd_contentpage_names` (
   `name_id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(40) NOT NULL default '',
   PRIMARY KEY  (`name_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_contentpage_names`
@@ -220,6 +223,7 @@ CREATE TABLE `sqd_contentpage_names` (
 INSERT INTO `sqd_contentpage_names` (`name_id`,`name`) VALUES 
  (1,'admin-default'),
  (2,'admin-modules'),
+ (3,'admin-error-message'),
  (4,'contentpage-default'),
  (5,'contentpage-add-new'),
  (6,'user-page'),
@@ -230,7 +234,9 @@ INSERT INTO `sqd_contentpage_names` (`name_id`,`name`) VALUES
  (11,'table-default'),
  (12,'form-default'),
  (19,'content-save-error-message'),
- (20,'content-save-success');
+ (20,'content-save-success'),
+ (21,'table-error-message'),
+ (22,'form-error-message');
 /*!40000 ALTER TABLE `sqd_contentpage_names` ENABLE KEYS */;
 
 
@@ -284,6 +290,7 @@ CREATE TABLE `sqd_contentpage_visibility` (
 INSERT INTO `sqd_contentpage_visibility` (`page_id`,`name_id`,`visibility`) VALUES 
  (2,1,0x01),
  (2,2,0x01),
+ (2,3,0x01),
  (2,4,0x01),
  (2,5,0x01),
  (2,7,0x01),
@@ -294,6 +301,8 @@ INSERT INTO `sqd_contentpage_visibility` (`page_id`,`name_id`,`visibility`) VALU
  (2,12,0x01),
  (2,19,0x01),
  (2,20,0x01),
+ (2,21,0x01),
+ (2,22,0x01),
  (5,6,0x01);
 /*!40000 ALTER TABLE `sqd_contentpage_visibility` ENABLE KEYS */;
 
@@ -440,7 +449,9 @@ INSERT INTO `sqd_form_templates` (`form_id`,`template_id`) VALUES
  (1,44),
  (3,45),
  (2,46),
- (4,47);
+ (4,47),
+ (7,62),
+ (8,63);
 /*!40000 ALTER TABLE `sqd_form_templates` ENABLE KEYS */;
 
 
@@ -457,7 +468,7 @@ CREATE TABLE `sqd_forms` (
   `form_type` tinyint(4) unsigned NOT NULL default '10',
   `form_submit_class` varchar(50) default NULL,
   PRIMARY KEY  (`form_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_forms`
@@ -470,7 +481,9 @@ INSERT INTO `sqd_forms` (`form_id`,`form_name`,`form_method`,`form_action`,`form
  (3,'contentpage-add-new-error',0x01,NULL,10,'contentpage_add_new'),
  (4,'contentpage-add-new-named-error',0x01,NULL,10,'contentpage_add_new'),
  (5,'content-add-new',0x01,NULL,10,'content_add_new'),
- (6,'content-add-new-error',0x01,NULL,10,'content_add_new');
+ (6,'content-add-new-error',0x01,NULL,10,'content_add_new'),
+ (7,'table-add-new',0x01,NULL,10,'table_add_new'),
+ (8,'table-add-new-error',0x01,NULL,10,'table_add_new');
 /*!40000 ALTER TABLE `sqd_forms` ENABLE KEYS */;
 
 
@@ -572,7 +585,7 @@ CREATE TABLE `sqd_templates` (
   `system_template` bit(1) NOT NULL default '\0',
   `template` text NOT NULL,
   PRIMARY KEY  (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=302 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=304 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_templates`
@@ -592,7 +605,7 @@ INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`t
  (21,'admin-template',0x01,'<div class=\"admin-module\">\r\n{Admin:admin}\r\n</div>'),
  (22,'admin-modules',0x01,'{Table:admin-modules}'),
  (28,'admin-message',0x01,'<table class=\"admin-message\">\r\n	<tr><td>{user-message}</td></tr>\r\n</table>'),
- (29,'admin-error',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>'),
+ (29,'admin-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>'),
  (30,'content-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Contents</b> - <a href=\"{url_prefix}admin/modules/Content/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Content ID</th><th>Content Alias</th><th>Content Type</th><th>Local Template Path</th></tr>\r\n{Table:content-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
  (31,'content-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Content/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Content Alias:</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Content Type:</td></tr>\r\n<tr><td>\r\n<select name=\"content-type\" class=\"input-select no-error\">\r\n<option value=\"11\">Static - Local</option>\r\n<option value=\"12\">Static - DB</option>\r\n</select>\r\n</td></tr>\r\n<tr><td>Content Local Path:</td></tr>\r\n<tr><td><input type=\"text\" name=\"content-local-path\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Or, Content Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
@@ -612,7 +625,12 @@ INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`t
  (49,'contentpage-save-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>\r\n<table class=\"admin-message\">\r\n	<tr><td>Navigate to <a href=\"{url_prefix}admin/modules/ContentPage\">Content Page</a></td></tr>\r\n</table>');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
  (60,'table-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Tables</b> - <a href=\"{url_prefix}admin/modules/Table/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Table ID</th><th>Table Alias</th><th>Table Type</th><th>Table Query</th></tr>\r\n{Table:table-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
- (70,'form-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Forms</b> - <a href=\"{url_prefix}admin/modules/Form/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Form ID</th><th>Form Name</th><th>Form Method</th><th>Form Type</th><th>Form Submit Class</th><th>Form Action</th></tr>\r\n{Table:form-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>');
+ (62,'table-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Table/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Table Alias:</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Table Type:</td></tr>\r\n<tr><td>\r\n<select name=\"table-type\" class=\"input-select no-error\">\r\n<option value=\"10\">SQL Table</option>\r\n<option value=\"15\">SQL Table with tag processing</option>\r\n</select>\r\n</td></tr>\r\n<tr><td>Table SQL-Query:</td></tr>\r\n<tr><td><textarea name=\"sql-query\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>\r\n'),
+ (63,'table-add-new-error',0x01,' ');
+INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
+ (69,'table-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>'),
+ (70,'form-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Forms</b> - <a href=\"{url_prefix}admin/modules/Form/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Form ID</th><th>Form Name</th><th>Form Method</th><th>Form Type</th><th>Form Submit Class</th><th>Form Action</th></tr>\r\n{Table:form-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
+ (79,'form-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>');
 /*!40000 ALTER TABLE `sqd_templates` ENABLE KEYS */;
 
 
@@ -1000,6 +1018,31 @@ BEGIN
 
 SELECT tpl_prio AS template_priority, vis AS content_visibility,
     intTPL AS template_id;
+
+END $$
+/*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
+
+DELIMITER ;
+
+--
+-- Definition of procedure `sqd_getFormTemplate`
+--
+
+DROP PROCEDURE IF EXISTS `sqd_getFormTemplate`;
+
+DELIMITER $$
+
+/*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='' */ $$
+CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_getFormTemplate`(IN _form_name VARCHAR(40))
+BEGIN
+
+SELECT 
+	t.`template` 
+FROM 
+	`sqd_forms` f INNER JOIN `sqd_form_templates` ft ON
+	f.`form_id` = ft.`form_id` INNER JOIN `sqd_templates` t ON
+	ft.`template_id` = t.`template_id` 
+WHERE f.`form_name` = _form_name;
 
 END $$
 /*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
