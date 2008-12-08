@@ -119,7 +119,8 @@ class Table implements RenderInterface, AdminInterface {
 		if (isset($_GET['config'])) {
 			switch ($_GET['config']) {
 				case 'add':
-					return "Add new table...";
+					$f = new Form("table-add-new", $this->config);
+					return $f->ReturnRenderedContent();
 					break;
 			}
 		}

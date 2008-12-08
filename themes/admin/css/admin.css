@@ -47,6 +47,11 @@ table.admin-message td {
 	text-align:left;
 }
 
+table.configpage-add-new td {
+	border:0;
+	text-align:left;
+}
+
 dl.admin-dlist dt,dd {
 	padding:5px;
 }

@@ -29,8 +29,16 @@ class Admin implements RenderInterface {
 				$module_class = new $module[0]($this->content_id, $this->config);
 				if ($module_class instanceof AdminInterface){
 					return $module_class->ReturnAdminPage();
-				} else return "$module[0]::No admin interface";
-			} else return "$module[0]::Not a configurable module";
+				} else {
+					$c = new ContentPage("admin-error-message", $this->config);
+					$e_message = array("{error-message}" => "$module[0]::No admin interface");
+					return $c->ReturnRenderedContent($e_message);
+				}
+			} else {
+				$c = new ContentPage("admin-error-message", $this->config);
+				$e_message = array("{error-message}" => "$module[0]::Not a configurable module");
+				return $c->ReturnRenderedContent($e_message);
+			}
 		}
 	}
 

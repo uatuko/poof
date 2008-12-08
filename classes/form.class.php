@@ -81,8 +81,16 @@ class Form implements RenderInterface, AdminInterface {
 				$s = new $class_name($this->content_id, $this->config);
 				if ($s instanceof FormSubmitInterface) {
 					$return = $s->ReturnSubmitForm();
-				} else $return = "Error: Unsupported interface for the form submit class.";
-			} else $return = "Error: Form submit class not recognised.";
+				} else {
+					$errC = new ContentPage("form-error-message", $this->config);
+					$e_message = array("{error-message}" => "Error: Unsupported interface for the form submit class.");
+					$return = $errC->ReturnRenderedContent($e_message);
+				}
+			} else {
+				$errC = new ContentPage("form-error-message", $this->config);
+				$e_message = array("{error-message}" => "Error: Form submit class not recognised.");
+				$return = $errC->ReturnRenderedContent($e_message);
+			}
 		}
 
 		unset($db);

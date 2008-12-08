@@ -1,0 +1,11 @@
+
+Version 0.0.5
+=============
+
+Changes
+-------
+	+ Proper error messages in Form Module
+	+ Table Module development
+	+ Proper error messages in Admin Module
+	
+	
