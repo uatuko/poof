@@ -26,13 +26,13 @@ class ContentPage extends Content {
 		
 		if ($results = $this->db->ExecuteSQLQuery("CALL ".$db_prefix."getContentPageTemplate('$page_alias[0]', '$this->content_id')")) {
 			foreach ($results as $row) {
-				if ($row[1] = 1) {	// content visibility = 1 (show content)
-					if ($row[0] = 1) {	// content priority = 1 (give priority to local template)
+				if ($row[1] == 1) {	// content visibility = 1 (show content)
+					if ($row[0] == 1) {	// content priority = 1 (give priority to local template)
 						$tpl_file = "themes/".$this->theme->GetThemeName($this->config->GetSiteName())."/templates/contentpage/".$this->content_id."template.html";
 						if (is_file($tpl_file)) {
 							$r_template = new Template($tpl_file, 'local', $this->config);
 						} else $r_template = new Template($row[2], 'dbase', $this->config);
-					}
+					} else $r_template = new Template($row[2], 'dbase', $this->config);
 				} else $r_template = false;				 
 			}
 		}
