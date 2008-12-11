@@ -454,7 +454,9 @@ INSERT INTO `sqd_form_templates` (`form_id`,`template_id`) VALUES
  (2,46),
  (4,47),
  (7,62),
- (8,63);
+ (8,63),
+ (9,72),
+ (10,73);
 /*!40000 ALTER TABLE `sqd_form_templates` ENABLE KEYS */;
 
 
@@ -471,7 +473,7 @@ CREATE TABLE `sqd_forms` (
   `form_type` tinyint(4) unsigned NOT NULL default '10',
   `form_submit_class` varchar(50) default NULL,
   PRIMARY KEY  (`form_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_forms`
@@ -486,7 +488,9 @@ INSERT INTO `sqd_forms` (`form_id`,`form_name`,`form_method`,`form_action`,`form
  (5,'content-add-new',0x01,NULL,10,'content_add_new'),
  (6,'content-add-new-error',0x01,NULL,10,'content_add_new'),
  (7,'table-add-new',0x01,NULL,10,'table_add_new'),
- (8,'table-add-new-error',0x01,NULL,10,'table_add_new');
+ (8,'table-add-new-error',0x01,NULL,10,'table_add_new'),
+ (9,'form-add-new-stage-1',0x01,NULL,10,'form_add_new'),
+ (10,'form-add-new-stage-1-error',0x01,NULL,10,'form_add_new');
 /*!40000 ALTER TABLE `sqd_forms` ENABLE KEYS */;
 
 
@@ -634,6 +638,9 @@ INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`t
  (68,'table-save-success',0x01,'<table class=\"admin-message\">\r\n<tr><td>\r\n	Table saved successfully. <br /><br />\r\n	Navigate to <a href=\"{url_prefix}admin/modules/Table/\">Table</a>\r\n</td></tr>\r\n</table>'),
  (69,'table-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>\r\n<table class=\"admin-message\">\r\n	<tr><td>Navigate to <a href=\"{url_prefix}admin/modules/Table/\">Table</a></td></tr>\r\n</table>'),
  (70,'form-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Forms</b> - <a href=\"{url_prefix}admin/modules/Form/?config=add\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Form ID</th><th>Form Name</th><th>Form Method</th><th>Form Type</th><th>Form Submit Class</th><th>Form Action</th></tr>\r\n{Table:form-table}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
+ (72,'form-add-new-stage-1',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Form/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"stage\" value=\"1\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Form Name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"form-name\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Form Type:</td></tr>\r\n<tr><td>\r\n<select name=\"form-type\" class=\"input-select no-error\">\r\n<option value=\"10\">SQL Table</option>\r\n<option value=\"15\">SQL Table with tag processing</option>\r\n</select>\r\n</td></tr>\r\n<tr><td><br /><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>\r\n');
+INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
+ (73,'form-add-new-stage-1-error',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Form/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"stage\" value=\"1\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Form Name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"form-name\" class=\"input-text {name-error}\" value=\"{name-value}\" /></td></tr>\r\n<tr><td>Form Type:</td></tr>\r\n<tr><td>\r\n<select name=\"form-type\" class=\"input-select no-error\">\r\n<option value=\"10\" {type-10-selected}>SQL Table</option>\r\n<option value=\"15\" {type-15-selected}>SQL Table with tag processing</option>\r\n</select>\r\n</td></tr>\r\n<tr><td><br /><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
  (79,'form-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>');
 /*!40000 ALTER TABLE `sqd_templates` ENABLE KEYS */;
 

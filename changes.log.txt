@@ -5,7 +5,19 @@ Version 0.0.5
 Changes
 -------
 	+ Proper error messages in Form Module
+	
+	+ Form Module development
+		- Add new table admin interface
+		
 	+ Table Module development
+		- Add new table admin interface
+		
 	+ Proper error messages in Admin Module
+	+ AJAX favourable start page and AJAX request handler
+		- ajax.php
+		
+	+ Introduction of MooTools scripts(1.2) 
+	
+	+ Bug fixes #2, #3, #4, #5, #6
 	
 	

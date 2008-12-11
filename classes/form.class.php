@@ -101,7 +101,8 @@ class Form implements RenderInterface, AdminInterface {
 		if (isset($_GET['config'])) {
 			switch ($_GET['config']) {
 				case 'add':
-					return "Add new form...";
+					$f = new Form("form-add-new-stage-1", $this->config);
+					return $f->ReturnRenderedContent();
 					break;
 			}
 		}
