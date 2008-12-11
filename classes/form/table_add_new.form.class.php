@@ -19,7 +19,9 @@ class table_add_new implements FormSubmitInterface {
 		$f_values = array("{alias-error}" => "no-error", "{alias-value}" => $_POST['alias'],
 						"{type-error}" => "no-error", 
 						"{type-10-selected}" => "", "{type-15-selected}" => "",
-						"{sql-query-error}" => "no-error", "{sql-query-value}" => $_POST['sql-query']);
+						"{sql-query-error}" => "no-error", "{sql-query-value}" => $_POST['sql-query'],
+						"{table-template-error}" => "no-error", 
+						"{table-template-value}" => $_POST['table-template']);
 		
 		switch ($_POST['table-type']) {
 			case '10':
@@ -32,13 +34,14 @@ class table_add_new implements FormSubmitInterface {
 
 		$db = new Database($this->config->GetDatabaseConfig());
 
-		if ($db->ExecuteMultiQuery("CALL ".$db->GetDBPrefix()."addTable('".$_POST['alias']."', '".$_POST['table-type']."', '".$_POST['sql-query']."', @x); SELECT @x;")) {
+		if ($db->ExecuteMultiQuery("CALL ".$db->GetDBPrefix()."addTable('".$_POST['alias']."', '".$_POST['table-type']."', '".$_POST['sql-query']."', '".$_POST['table-template']."', @x); SELECT @x;")) {
 			$db->MultiQueryNextResult();
 			if ($result = $db->MultiQueryFetchResults()) {
 				$row = $db->FetchRow($result);
 				if ($row[0] != 0) {
 					switch ($row[0]) {
 						case 10:
+						case 11:
 							$f_values["{alias-error}"] = "error";
 							$c_values["{error-message}"] .= "- Error: [$row[0]] <br />";
 							break;
@@ -46,6 +49,12 @@ class table_add_new implements FormSubmitInterface {
 							$f_values["{sql-query-error}"] = "error";
 							$c_values["{error-message}"] .= "- Error: [$row[0]] <br />";
 							break;
+						case 30:
+							$f_values["{table-template-error}"] = "error";
+							$c_values["{error-message}"] .= "- Error [$row[0]] <br />";
+							break;
+						default:
+							$c_values["{error-message}"] .= "- Error [$row[0]] <br />";
 					}
 				} else {
 					$blnError = false;

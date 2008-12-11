@@ -63,6 +63,10 @@ div.admin-module textarea {
 	padding:3px;
 }
 
+div.admin-module textarea.small {
+	height:200px;
+}
+
 div.admin-module input.input-submit {
 	border:1px solid #C0C0C0;
 	background-color:#EAEAEA;
