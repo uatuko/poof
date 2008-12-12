@@ -16,8 +16,39 @@ class Content implements RenderInterface, AdminInterface {
 		unset($this->db);
 	}
 
-
-	public function ReturnRenderedContent() {
+	protected function CreateContentClasses($contents) {
+		
+		$regx = "/[a-zA-Z0-9_]+\:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+/";
+			
+		$content_classes = array();
+		
+		foreach($contents as $content) {
+			if (preg_match($regx, $content, $matches)) {
+				$arr = split(":", $matches[0]);
+				
+				if (!$arr[1]) {
+					$arr[1] = $arr[0];
+					$arr[0] = "Content";
+				}
+				
+				$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
+			}
+		}
+		return $content_classes;
+	}
+	
+	protected function RenderContentClasses(&$content_classes) {
+		
+		$rendered_classes = array();
+		
+		foreach(array_keys($content_classes) as $content_key) {
+			$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
+		}
+		
+		return $rendered_classes;
+	}
+	
+	public function ReturnRenderedContent($process_inner = false) {
 
 		$return_html = "";
 		$db_prefix = $this->db->GetDBPrefix();
@@ -41,6 +72,18 @@ class Content implements RenderInterface, AdminInterface {
 			}
 		} else $return_html = $this->content_id;
 
+		if ($process_inner && ($return_html != $this->content_id)) {
+			
+			$template = new Template($return_html, 'string');
+			$content_classes = array();
+			$rendered_classes = array();
+			
+			$content_classes = $this->CreateContentClasses($template->GetContents());
+			$rendered_classes = $this->RenderContentClasses($content_classes);
+			
+			$return_html = $template->ParseTemplate($rendered_classes);
+		}
+		
 		return $return_html;
 	}
 

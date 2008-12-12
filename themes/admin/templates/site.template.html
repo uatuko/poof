@@ -7,10 +7,24 @@
 
 <link href="{url_prefix}themes/admin/css/main.css" type="text/css" rel="stylesheet">
 <link href="{url_prefix}themes/admin/css/admin.css" type="text/css" rel="stylesheet">
+<link href="{url_prefix}themes/admin/css/modules.css" type="text/css" rel="stylesheet">
 
 <body>
 <table class="m_body" id="m_body">
-<tr><td colspan="2"><h1>HEADER</h1></td></tr>
+<tr><td colspan="2">
+	<h1>HEADER</h1>
+	<table class="login-wrapper">
+	<tr><td class="no-border left">
+		<div class="user-info-short">
+			{User:info_short}
+		</div>
+	</td><td class="no-border right">
+		<div class="user-login-link">
+			{User:login_link}
+		</div>
+	</td></tr>
+	</table>
+</td></tr>
 <tr>
 	<td class="l_menu">
 		<ul>

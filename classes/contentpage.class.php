@@ -3,10 +3,12 @@
 class ContentPage extends Content {
 	
 	protected $theme;
+	protected $page_alias;
 	
-	public function __construct($content_id, $config) {
+	public function __construct($content_id, $config, $page_alias = null) {
 		parent::__construct($content_id, $config);
 		$this->theme = new Theme($config);
+		$this->page_alias = $page_alias;
 	}
 	
 	public function __destruct() {
@@ -22,6 +24,10 @@ class ContentPage extends Content {
 		
 		if (!$page_alias[0]) {
 			$page_alias[0] = "home";
+		}
+		
+		if ($this->page_alias) {
+			$page_alias[0] = $this->page_alias;
 		}
 		
 		if ($results = $this->db->ExecuteSQLQuery("CALL ".$db_prefix."getContentPageTemplate('$page_alias[0]', '$this->content_id')")) {
@@ -40,39 +46,6 @@ class ContentPage extends Content {
 		
 	}
 
-	private function CreateContentClasses($contents) {
-		
-		$regx = "/[a-zA-Z0-9_]+\:[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+/";
-			
-		$content_classes = array();
-		
-		foreach($contents as $content) {
-			if (preg_match($regx, $content, $matches)) {
-				$arr = split(":", $matches[0]);
-				
-				if (!$arr[1]) {
-					$arr[1] = $arr[0];
-					$arr[0] = "Content";
-				}
-				
-				$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
-			}
-		}
-		return $content_classes;
-	}
-	
-	private function RenderContentClasses(&$content_classes) {
-		
-		$rendered_classes = array();
-		
-		foreach(array_keys($content_classes) as $content_key) {
-			$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
-		}
-		
-		return $rendered_classes;
-	}
-
-	
 	public function ReturnRenderedContent(&$rendered_values = null, $override = false) {
 
 		$rendered_template = "";

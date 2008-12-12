@@ -18,6 +18,14 @@ Changes
 		
 	+ Introduction of MooTools scripts(1.2) 
 	
+	+ Introducing User Module
+	
+	+ Content Module
+		- Option to process inner tags (only through code)
+	
+	+ ContentPage Module
+		- Option to explicitly specify the page alias
+	
 	+ Bug fixes #2, #3, #4, #5, #6
 	
 	

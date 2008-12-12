@@ -1,0 +1,76 @@
+/* 
+ * CSS File for module styles 
+ */
+
+/* User Module */
+table.login-wrapper {
+	border:0;
+	width:100%;
+}
+
+table.login-wrapper td.no-border {
+	border:0;
+}
+
+table.login-wrapper td.right {
+	width:50px;
+}
+
+div.user-info-short {
+	border-right:1px solid #575757;
+	font-size:10px;
+	text-align:right;
+	padding:5px;
+}
+
+div.user-login-link {
+	font-size:10px;
+	text-align:left;
+	padding:5px;
+}
+
+div.user-login {
+	font-size:10px;
+	text-align:center;
+	padding-top:50px;
+	padding-bottom:70px;
+}
+
+div.user-login table.user-login {
+	border:1px solid #575757;
+	padding:5px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+div.user-login table.user-login td {
+	border:0;
+	text-align:left;
+}
+
+div.user-login input.input-submit {
+	border:1px solid #C0C0C0;
+	background-color:#EAEAEA;
+	color:#575757;
+	padding:1px;
+	font-size:11px;
+	width:100px;
+}
+
+div.user-login input.input-text {
+	color:#575757;
+	padding:2px;
+	width:200px;
+}
+
+div.user-login .no-error {
+	border:1px solid #C0C0C0;
+}
+
+div.user-login .error {
+	border:1px solid #DD7777;
+}
+	
+
+
+/* END - User Module */

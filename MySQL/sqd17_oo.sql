@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS `sqd_view_contents`;
 DROP VIEW IF EXISTS `sqd_view_contents`;
 CREATE TABLE `sqd_view_contents` (
   `content_id` int(11) unsigned,
-  `content_alias` varchar(10),
+  `content_alias` varchar(40),
   `content_type` tinyint(4) unsigned,
   `template` text,
   `local_path` varchar(50)
@@ -157,7 +157,9 @@ CREATE TABLE `sqd_content_templates` (
 /*!40000 ALTER TABLE `sqd_content_templates` DISABLE KEYS */;
 INSERT INTO `sqd_content_templates` (`content_id`,`template_id`) VALUES 
  (1,1),
- (2,2);
+ (2,2),
+ (3,83),
+ (4,84);
 /*!40000 ALTER TABLE `sqd_content_templates` ENABLE KEYS */;
 
 
@@ -200,8 +202,8 @@ INSERT INTO `sqd_contentpage_name_templates` (`page_id`,`name_id`,`template_id`)
  (2,23,68),
  (2,21,69),
  (2,12,70),
- (5,6,70),
- (2,22,79);
+ (2,22,79),
+ (10,22,79);
 /*!40000 ALTER TABLE `sqd_contentpage_name_templates` ENABLE KEYS */;
 
 
@@ -227,7 +229,6 @@ INSERT INTO `sqd_contentpage_names` (`name_id`,`name`) VALUES
  (3,'admin-error-message'),
  (4,'contentpage-default'),
  (5,'contentpage-add-new'),
- (6,'user-page'),
  (7,'javascript-back'),
  (8,'contentpage-save-success'),
  (9,'contentpage-save-error-message'),
@@ -264,7 +265,8 @@ CREATE TABLE `sqd_contentpage_templates` (
 INSERT INTO `sqd_contentpage_templates` (`page_id`,`template_id`) VALUES 
  (1,3),
  (2,21),
- (8,60);
+ (5,81),
+ (9,82);
 /*!40000 ALTER TABLE `sqd_contentpage_templates` ENABLE KEYS */;
 
 
@@ -306,7 +308,7 @@ INSERT INTO `sqd_contentpage_visibility` (`page_id`,`name_id`,`visibility`) VALU
  (2,21,0x01),
  (2,22,0x01),
  (2,23,0x01),
- (5,6,0x01);
+ (10,22,0x01);
 /*!40000 ALTER TABLE `sqd_contentpage_visibility` ENABLE KEYS */;
 
 
@@ -321,7 +323,7 @@ CREATE TABLE `sqd_contentpages` (
   `template_priority` bit(1) NOT NULL default '',
   PRIMARY KEY  (`page_id`),
   UNIQUE KEY `page_alias` (`page_alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_contentpages`
@@ -332,7 +334,8 @@ INSERT INTO `sqd_contentpages` (`page_id`,`page_alias`,`template_priority`) VALU
  (1,'home',0x01),
  (2,'admin',0x01),
  (5,'user',0x01),
- (8,'8',0x01);
+ (9,'users',0x01),
+ (10,'form',0x01);
 /*!40000 ALTER TABLE `sqd_contentpages` ENABLE KEYS */;
 
 
@@ -343,11 +346,12 @@ INSERT INTO `sqd_contentpages` (`page_id`,`page_alias`,`template_priority`) VALU
 DROP TABLE IF EXISTS `sqd_contents`;
 CREATE TABLE `sqd_contents` (
   `content_id` int(11) unsigned NOT NULL auto_increment,
-  `content_alias` varchar(10) NOT NULL,
+  `content_alias` varchar(40) NOT NULL default '',
   `content_type` tinyint(4) unsigned NOT NULL default '12',
   PRIMARY KEY  (`content_id`),
-  UNIQUE KEY `content_alias` (`content_alias`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `content_alias` (`content_alias`),
+  UNIQUE KEY `content_alias_2` (`content_alias`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_contents`
@@ -356,7 +360,9 @@ CREATE TABLE `sqd_contents` (
 /*!40000 ALTER TABLE `sqd_contents` DISABLE KEYS */;
 INSERT INTO `sqd_contents` (`content_id`,`content_alias`,`content_type`) VALUES 
  (1,'menu',12),
- (2,'url_prefix',12);
+ (2,'url_prefix',12),
+ (3,'user-link-log-out',12),
+ (4,'user-link-log-in',12);
 /*!40000 ALTER TABLE `sqd_contents` ENABLE KEYS */;
 
 
@@ -456,7 +462,8 @@ INSERT INTO `sqd_form_templates` (`form_id`,`template_id`) VALUES
  (7,62),
  (8,63),
  (9,72),
- (10,73);
+ (10,73),
+ (11,85);
 /*!40000 ALTER TABLE `sqd_form_templates` ENABLE KEYS */;
 
 
@@ -473,7 +480,7 @@ CREATE TABLE `sqd_forms` (
   `form_type` tinyint(4) unsigned NOT NULL default '10',
   `form_submit_class` varchar(50) default NULL,
   PRIMARY KEY  (`form_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_forms`
@@ -490,7 +497,8 @@ INSERT INTO `sqd_forms` (`form_id`,`form_name`,`form_method`,`form_action`,`form
  (7,'table-add-new',0x01,NULL,10,'table_add_new'),
  (8,'table-add-new-error',0x01,NULL,10,'table_add_new'),
  (9,'form-add-new-stage-1',0x01,NULL,10,'form_add_new'),
- (10,'form-add-new-stage-1-error',0x01,NULL,10,'form_add_new');
+ (10,'form-add-new-stage-1-error',0x01,NULL,10,'form_add_new'),
+ (11,'user-login',0x01,NULL,10,'user_login');
 /*!40000 ALTER TABLE `sqd_forms` ENABLE KEYS */;
 
 
@@ -592,7 +600,7 @@ CREATE TABLE `sqd_templates` (
   `system_template` bit(1) NOT NULL default '\0',
   `template` text NOT NULL,
   PRIMARY KEY  (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_templates`
@@ -641,7 +649,13 @@ INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`t
  (72,'form-add-new-stage-1',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Form/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"stage\" value=\"1\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Form Name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"form-name\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Form Type:</td></tr>\r\n<tr><td>\r\n<select name=\"form-type\" class=\"input-select no-error\">\r\n<option value=\"10\">SQL Table</option>\r\n<option value=\"15\">SQL Table with tag processing</option>\r\n</select>\r\n</td></tr>\r\n<tr><td><br /><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>\r\n');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
  (73,'form-add-new-stage-1-error',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/Form/?config=add&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"stage\" value=\"1\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Form Name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"form-name\" class=\"input-text {name-error}\" value=\"{name-value}\" /></td></tr>\r\n<tr><td>Form Type:</td></tr>\r\n<tr><td>\r\n<select name=\"form-type\" class=\"input-select no-error\">\r\n<option value=\"10\" {type-10-selected}>SQL Table</option>\r\n<option value=\"15\" {type-15-selected}>SQL Table with tag processing</option>\r\n</select>\r\n</td></tr>\r\n<tr><td><br /><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
- (79,'form-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>');
+ (79,'form-error-message',0x01,'<table class=\"admin-error\">\r\n	<tr><td>{error-message}</td></tr>\r\n</table>'),
+ (81,'user-user',0x01,'{User:user-user}');
+INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
+ (82,'user-users',0x01,'{User:user-users}'),
+ (83,'user-link-log-out',0x01,'<a href=\"{url_prefix}user/logout\">Log Out</a>'),
+ (84,'user-link-log-in',0x01,'<a href=\"{url_prefix}user/\">Log in</a>'),
+ (85,'user-login',0x01,'<div class=\"user-login\">\r\n<form name=\"user-login\" method=\"post\" action=\"{url_prefix}user/\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"user-login\">\r\n<tr><td>Username:</td></tr>\r\n<tr><td><input type=\"text\" name=\"user-name\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Password:</td></tr>\r\n<tr><td><input type=\"password\" name=\"password\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td><br /><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>\r\n</div>');
 /*!40000 ALTER TABLE `sqd_templates` ENABLE KEYS */;
 
 
@@ -995,7 +1009,7 @@ DROP PROCEDURE IF EXISTS `sqd_getContent`;
 DELIMITER $$
 
 /*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='' */ $$
-CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_getContent`(IN alias VARCHAR(10))
+CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_getContent`(IN alias VARCHAR(40))
 BEGIN
   DECLARE done BOOLEAN DEFAULT FALSE;
   DECLARE txtResult TEXT;
