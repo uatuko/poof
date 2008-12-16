@@ -20,7 +20,7 @@ Installation
 	Change or create a new configuration file in config/. Make sure you are loading the correct 
 	configuration file in index.php (line 37).
 	
-	Please report all bugz at http://forumz.squad17.com/viewforum.php?f=18&sid=5cf700acdc6adf7cc47fe673b91bab32
+	Please report all bugz at http://tracker.squad17.org/
 
 	Project URLs
 		- http://www.squad17.org/phpoocmf
