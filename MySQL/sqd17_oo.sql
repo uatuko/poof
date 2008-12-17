@@ -503,6 +503,34 @@ INSERT INTO `sqd_forms` (`form_id`,`form_name`,`form_method`,`form_action`,`form
 
 
 --
+-- Definition of table `sqd_module_dependencies`
+--
+
+DROP TABLE IF EXISTS `sqd_module_dependencies`;
+CREATE TABLE `sqd_module_dependencies` (
+  `module_id` int(11) unsigned NOT NULL,
+  `depending_module_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY  (`module_id`,`depending_module_id`),
+  KEY `module_id` (`module_id`),
+  KEY `depending_module_id` (`depending_module_id`),
+  CONSTRAINT `sqd_module_dependencies_fk1` FOREIGN KEY (`depending_module_id`) REFERENCES `sqd_modules` (`module_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `sqd_module_dependencies_fk` FOREIGN KEY (`module_id`) REFERENCES `sqd_modules` (`module_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sqd_module_dependencies`
+--
+
+/*!40000 ALTER TABLE `sqd_module_dependencies` DISABLE KEYS */;
+INSERT INTO `sqd_module_dependencies` (`module_id`,`depending_module_id`) VALUES 
+ (3,1),
+ (3,2),
+ (3,4),
+ (3,5);
+/*!40000 ALTER TABLE `sqd_module_dependencies` ENABLE KEYS */;
+
+
+--
 -- Definition of table `sqd_modules`
 --
 
@@ -510,7 +538,10 @@ DROP TABLE IF EXISTS `sqd_modules`;
 CREATE TABLE `sqd_modules` (
   `module_id` int(11) unsigned NOT NULL auto_increment,
   `module_name` varchar(20) NOT NULL,
-  `enabled` bit(1) NOT NULL default '',
+  `module_description` text,
+  `module_installed` bit(1) NOT NULL default '',
+  `module_enabled` bit(1) NOT NULL default '',
+  `module_is_core` bit(1) NOT NULL default '\0',
   PRIMARY KEY  (`module_id`),
   UNIQUE KEY `module_name` (`module_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
@@ -520,12 +551,12 @@ CREATE TABLE `sqd_modules` (
 --
 
 /*!40000 ALTER TABLE `sqd_modules` DISABLE KEYS */;
-INSERT INTO `sqd_modules` (`module_id`,`module_name`,`enabled`) VALUES 
- (1,'Content',0x01),
- (2,'ContentPage',0x01),
- (3,'Admin',0x01),
- (4,'Table',0x01),
- (5,'Form',0x01);
+INSERT INTO `sqd_modules` (`module_id`,`module_name`,`module_description`,`module_installed`,`module_enabled`,`module_is_core`) VALUES 
+ (1,'Content',NULL,0x01,0x01,0x01),
+ (2,'ContentPage',NULL,0x01,0x01,0x01),
+ (3,'Admin','Admin Module',0x01,0x01,0x01),
+ (4,'Table',NULL,0x01,0x01,0x01),
+ (5,'Form',NULL,0x01,0x01,0x01);
 /*!40000 ALTER TABLE `sqd_modules` ENABLE KEYS */;
 
 
