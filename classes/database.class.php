@@ -70,8 +70,8 @@ class Database {
 		return $result->fetch_assoc();
 	}
 	
-	public function FetchRow($results) {
-		return $results->fetch_row();
+	public function FetchRow($result) {
+		return $result->fetch_row();
 	}
 	
 	

@@ -16,6 +16,12 @@ class ContentPage extends Content {
 		unset($this->theme);
 	}
 	
+	private function CheckPageURL($page_alias) {
+		$blnReturn = false;
+		
+		return $blnReturn;
+	}
+	
 	private function GetContentPageTemplate() {
 
 		$page_alias = split("/", $_GET['q'], 2);
@@ -28,10 +34,14 @@ class ContentPage extends Content {
 		
 		if ($this->page_alias) {
 			$page_alias[0] = $this->page_alias;
+		} else {
+			if (!$this->CheckPageURL($page_alias[0])) {
+				// return 404
+			}
 		}
 		
-		if ($results = $this->db->ExecuteSQLQuery("CALL ".$db_prefix."getContentPageTemplate('$page_alias[0]', '$this->content_id')")) {
-			foreach ($results as $row) {
+		if ($result = $this->db->ExecuteQuery("CALL ".$db_prefix."getContentPageTemplate('$page_alias[0]', '$this->content_id')")) {
+			if ($row = $this->db->FetchRow($result)) {
 				if ($row[1] == 1) {	// content visibility = 1 (show content)
 					if ($row[0] == 1) {	// content priority = 1 (give priority to local template)
 						$tpl_file = "themes/".$this->theme->GetThemeName($this->config->GetSiteName())."/templates/contentpage/".$this->content_id."template.html";
@@ -42,6 +52,7 @@ class ContentPage extends Content {
 				} else $r_template = false;				 
 			}
 		}
+		
 		return $r_template;
 		
 	}
