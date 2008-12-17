@@ -31,8 +31,14 @@ class Template {
 
 	private function LoadTemplateDB($tpl_id, $config) {
 		$db = new Database($config->GetDatabaseConfig());
-
-		if ($result = $db->ExecuteQuery("SELECT t.`template`, t.`system_template` FROM `".$db->GetDBPrefix()."templates` t WHERE t.`template_id` = $tpl_id")) {
+		
+		if (is_numeric($tpl_id)) {
+			$sql = "SELECT t.`template`, t.`system_template` FROM `".$db->GetDBPrefix()."templates` t WHERE t.`template_id` = $tpl_id LIMIT 1;";
+		} else {
+			$sql = "SELECT t.`template`, t.`system_template` FROM `".$db->GetDBPrefix()."templates` t WHERE t.`template_alias` = '$tpl_id' LIMIT 1;";
+		}
+		
+		if ($result = $db->ExecuteQuery($sql)) {
 			if ($row = $db->FetchAssoc($result)) {
 				$this->template = $row['template'];
 				$this->system_template = (boolean) $row['system_template'];

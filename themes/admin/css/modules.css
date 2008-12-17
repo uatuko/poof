@@ -70,7 +70,17 @@ div.user-login .no-error {
 div.user-login .error {
 	border:1px solid #DD7777;
 }
-	
-
 
 /* END - User Module */
+
+/* ContentPage Module */
+
+div.contentpage-error {
+	border:1px solid #DD7777;
+	background-color:#FFCCCC;
+	color:#EE5555;
+	margin:20px 5px 30px 5px;
+	padding:10px;
+}
+
+/* END - ContentPage Module */

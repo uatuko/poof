@@ -34,7 +34,7 @@ function __autoload($class_name) {
 
 }
 
-$config = new Config("config/default.config.xml");
+$config = new Config("config/remote.config.xml");
 $site = new Site($config);
 
 print $site->RenderHTML();

@@ -600,7 +600,7 @@ CREATE TABLE `sqd_templates` (
   `system_template` bit(1) NOT NULL default '\0',
   `template` text NOT NULL,
   PRIMARY KEY  (`template_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sqd_templates`
@@ -631,6 +631,7 @@ INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`t
  (40,'contentpage-default',0x01,'<dl class=\"admin-dlist\">\r\n<dt><b>Content Pages</b> - <a href=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Content Page ID</th><th>Page URL (Alias)</th><th>Template Priority</th></tr>\r\n{Table:contentpage_table_pages}\r\n</table>\r\n</dd>\r\n<dt><b>Named Content Pages</b> - <a href=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named\">Add new</a></dt>\r\n<dd>\r\n<table class=\"admin-contentpage\">\r\n<tr><th>Named ID</th><th>Page URL (Alias)</th><th>Content Page Name</th><th>Visibility</th><th>Template Priority</th></tr>\r\n{Table:contentpage_table_namedpages}\r\n</table>\r\n</dd>\r\n<dt>Navigate to <a href=\"{url_prefix}admin/modules\">Modules</a></dt>\r\n</dl>'),
  (41,'contentpage-tables',0x01,'[row]<tr>[cell]<td>{cell}</td>[/cell]</tr>[/row]');
 INSERT INTO `sqd_templates` (`template_id`,`template_alias`,`system_template`,`template`) VALUES 
+ (42,'contentpage-404',0x01,'<div class=\"contentpage-error\">\r\n	Error 404: The Page you requested cannot be found on this server.\r\n</div>'),
  (44,'contentpage-add-new',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
  (45,'contentpage-add-new-error',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=page&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<input type=\"hidden\" name=\"page-name\" value=\"\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text {alias-error}\" value=\"{alias-value}\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"{template-error}\">{template-value}</textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>'),
  (46,'contentpage-add-new-named',0x01,'<form name=\"add-new\" method=\"post\" action=\"{url_prefix}admin/modules/ContentPage/?config=add&page=named&action=save\">\r\n<input type=\"hidden\" name=\"save\" value=\"true\" />\r\n<table class=\"configpage-add-new\">\r\n<tr><td>Page URL (Alias):</td></tr>\r\n<tr><td><input type=\"text\" name=\"alias\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page name:</td></tr>\r\n<tr><td><input type=\"text\" name=\"page-name\" class=\"input-text no-error\" /></td></tr>\r\n<tr><td>Page Template:</td></tr>\r\n<tr><td><textarea name=\"template\" rows=\"10\" cols=\"50\" class=\"no-error\"></textarea></td></tr>\r\n<tr><td><input type=\"submit\" name=\"submit\" value=\"Save\" class=\"input-submit\" /></td></tr>\r\n</table>\r\n</form>');
@@ -995,6 +996,33 @@ ELSE
 END IF;
 
 
+END $$
+/*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
+
+DELIMITER ;
+
+--
+-- Definition of procedure `sqd_checkContentPage`
+--
+
+DROP PROCEDURE IF EXISTS `sqd_checkContentPage`;
+
+DELIMITER $$
+
+/*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='' */ $$
+CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_checkContentPage`(IN _alias VARCHAR(40))
+BEGIN
+
+DECLARE intPageID INT DEFAULT 0;
+
+SET intPageID = (SELECT c.`page_id`
+					FROM `sqd_contentpages` c
+    				WHERE c.`page_alias` = `_alias`);
+
+SET intPageID = IFNULL(intPageID, 0);
+
+SELECT intPageID AS page_id;
+    
 END $$
 /*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
 

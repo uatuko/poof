@@ -47,7 +47,7 @@ class Database {
 	}
 	
 	public function ExecuteQuery($sql) {
-		return $this->mysqli->query($sql);
+		return $this->mysqli->query($sql, MYSQLI_STORE_RESULT);
 	}
 	
 	public function ExecuteMultiQuery($sql) {

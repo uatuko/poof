@@ -13,10 +13,11 @@ Changes
 		- Add new table admin interface
 		
 	+ Proper error messages in Admin Module
+	
 	+ AJAX favourable start page and AJAX request handler
 		- ajax.php
 		
-	+ Introduction of MooTools scripts(1.2) 
+	+ Introducing MooTools scripts(1.2) 
 	
 	+ Introducing User Module
 	
@@ -25,6 +26,13 @@ Changes
 	
 	+ ContentPage Module
 		- Option to explicitly specify the page alias
+		- 404 error message for invalid page URLs
+		
+	+ Template Module
+		- Load template from either template_id or template_alias when loading from database
 	
+	+ Table Module
+		- Option to override the table content through an array
+		
 	+ Bug fixes #2, #3, #4, #5, #6
 		

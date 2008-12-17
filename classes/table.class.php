@@ -98,14 +98,20 @@ class Table implements RenderInterface, AdminInterface {
 		
 	}
 	
-	public function ReturnRenderedContent() {
+	public function ReturnRenderedContent(&$table_contents = null) {
 
 		$rendered_content = "";
 
 		$table_template = new TableTemplate($this->GetTableTemplateID(), 'dbase', $this->config);
-		$rendered_content = $table_template->ParseTemplate($this->GetTableContentsArray());
-		unset($table_template);
+		
+		if (is_array($table_contents)) {
+			$rendered_content = $table_template->ParseTemplate($table_contents);
+		} else {
+			$rendered_content = $table_template->ParseTemplate($this->GetTableContentsArray());
+		}
 
+		unset($table_template);
+		
 		if ((($this->GetTableType())%10) == 5) {
 			// Process inner classes
 			$rendered_content = $this->RenderInnerClasses($rendered_content);

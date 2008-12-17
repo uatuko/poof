@@ -19,6 +19,23 @@ class ContentPage extends Content {
 	private function CheckPageURL($page_alias) {
 		$blnReturn = false;
 		
+		$sql = "CALL " . $this->db->GetDBPrefix() . "checkContentPage('$page_alias');";
+		if ($result = $this->db->ExecuteQuery($sql)) {
+			if ($row = $this->db->FetchRow($result)) {
+				if ($row[0] > 0) $blnReturn = true; 
+			}
+		}
+		
+		/*
+		 * To avoid 'Commands out of sync; you can't run this command now' 
+		 * error why using mysqli
+		 * 
+		 * FIX ME: This MUST be properly fixed in the Database class
+		 * 
+		 */
+		
+		$this->db->MultiQueryNextResult();
+		
 		return $blnReturn;
 	}
 	
@@ -36,7 +53,8 @@ class ContentPage extends Content {
 			$page_alias[0] = $this->page_alias;
 		} else {
 			if (!$this->CheckPageURL($page_alias[0])) {
-				// return 404
+				$r_template = new Template("contentpage-404", 'dbase', $this->config);
+				return $r_template;
 			}
 		}
 		

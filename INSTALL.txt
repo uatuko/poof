@@ -1,11 +1,13 @@
 
-Version 0.0.4
+Version 0.0.5
 
 Release Notes
 -------------
 	
-	Completed and beta test release of Content module.
-	Bug fixes in Form module engine.
+	Enhancements.
+	Bug Fixes.
+	
+	Please reffer to the changes.log.txt for more details.
 	
 
 Installation
