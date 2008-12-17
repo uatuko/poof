@@ -8,6 +8,8 @@ body {
     color:#474747;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight: normal;	
+    background: white url("../images/site_background.png");
+    margin:20px;
 }
 
 /* TABLES */
@@ -64,4 +66,14 @@ a:hover {
 	color:#4186BE;
 	text-decoration:underline;
 }
+
+div.w3c-validator {
+	text-align:center;
+}
+
+div.w3c-validator img {
+	border:0;
+}
+
+
 

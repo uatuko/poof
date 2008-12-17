@@ -1,4 +1,13 @@
 
+Version 0.0.6
+=============
+
+Changes
+-------
+	+ Improvements to the admin theme
+		- W3C HTML 4.01 valid
+	
+	
 Version 0.0.5
 =============
 
