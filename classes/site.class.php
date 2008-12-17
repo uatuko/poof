@@ -42,7 +42,9 @@ class Site {
 					$arr[0] = "Content";
 				}
 				
-				$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
+				if (class_exists($arr[0])) {
+					$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
+				} else print("Class:$arr[0] not found");				
 			}
 		}
 		return $content_classes;
@@ -53,7 +55,9 @@ class Site {
 		$rendered_classes = array();
 		
 		foreach(array_keys($content_classes) as $content_key) {
-			$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
+			if ($content_classes[$content_key] instanceof RenderInterface) {
+				$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
+			}
 		}
 		
 		return $rendered_classes;
@@ -66,10 +70,7 @@ class Site {
 		
 		$content_classes = $this->CreateContentClasses($this->page_template->GetContents());
 		$rendered_classes = $this->RenderContentClasses($content_classes);
-		
-		//print_r($this->theme);
-		//print_r($content_classes);
-		
+			
 		return ($this->page_template->ParseTemplate($rendered_classes));
 	}
 }

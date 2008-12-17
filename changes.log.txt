@@ -6,7 +6,20 @@ Changes
 -------
 	+ Improvements to the admin theme
 		- W3C HTML 4.01 valid
-	
+		
+	+ Content Module
+		- General improvements
+		
+	+ Form Module
+		- General improvements
+		
+	+ Table Module
+		- General improvements
+		
+	+ Site Module
+		- General improvements
+		
+	+ Removed unnecessary files
 	
 Version 0.0.5
 =============

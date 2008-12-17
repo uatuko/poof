@@ -28,7 +28,9 @@ class Form implements RenderInterface, AdminInterface {
 					$arr[0] = "Content";
 				}
 				
-				$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
+				if (class_exists($arr[0])) {
+					$content_classes[$content] = new $arr[0]($arr[1], $this->config);				
+				}				
 			}
 		}
 		return $content_classes;
@@ -39,7 +41,9 @@ class Form implements RenderInterface, AdminInterface {
 		$rendered_classes = array();
 		
 		foreach(array_keys($content_classes) as $content_key) {
-			$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
+			if ($content_classes[$content_key] instanceof RenderInterface) {
+				$rendered_classes[$content_key] = $content_classes[$content_key]->ReturnRenderedContent();
+			}
 		}
 		
 		return $rendered_classes;
