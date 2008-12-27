@@ -21,6 +21,10 @@ Changes
 		
 	+ Removed unnecessary files
 	
+	+ .htaccess bug fix
+	
+	
+	
 Version 0.0.5
 =============
 

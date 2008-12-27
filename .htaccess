@@ -13,7 +13,7 @@ Options +FollowSymlinks
 	RewriteCond %{REQUEST_URI} ![^.]*\.[^.]+$
 	
 	# THEN append trailing slash and redirect the client
-	RewriteCond %{HTTP_HOST} (.+)
+	RewriteCond %{HTTP_HOST} (.+/)
 	RewriteRule (.*) http://%1/$1/ [R=301,L]
 
 	# RewriteRule !(\.gif¦\.jpg¦\.css¦index\.php)$ index.php [L]
