@@ -1,8 +1,8 @@
 
 Options +FollowSymlinks
 
+# Rewrite engine MUST to be on
 
-<IfModule rewrite_module>
 	RewriteEngine on
 
 	#
@@ -13,16 +13,17 @@ Options +FollowSymlinks
 	RewriteCond %{REQUEST_URI} ![^.]*\.[^.]+$
 	
 	# THEN append trailing slash and redirect the client
+	# RewriteCond %{HTTP_HOST} (.+)
+	# If the root is in a sub directory use the following 
 	RewriteCond %{HTTP_HOST} (.+/)
 	RewriteRule (.*) http://%1/$1/ [R=301,L]
 
 	# RewriteRule !(\.gif¦\.jpg¦\.css¦index\.php)$ index.php [L]
 
+	# If the root is in a sub directory specify it here
 	RewriteBase /squad17.com
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	# RewriteCond %{REQUEST_URI} !(\.gif¦\.jpg¦\.css¦index\.php)$
 	# RewriteRule ^view/([^/\.]+)/?$ index.php?view=$1 [L]
 	RewriteRule ^(.*)$ index.php?q=$1 [L,QSA]
-	
-</IfModule>

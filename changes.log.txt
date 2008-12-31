@@ -21,7 +21,7 @@ Changes
 		
 	+ Removed unnecessary files
 	
-	+ .htaccess bug fix
+	+ .htaccess bug fix and more options, comments
 	
 	
 	
