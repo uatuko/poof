@@ -182,13 +182,46 @@ class TableTemplate extends Template {
 		
 	}
 	
-	public function ParseTemplate(&$table_content) {
+	private function RenderCellsI(&$cells) {
+		// This function renders each cell seperately
+		// allowing a different template for each cell
+		
+		$return_row = "";
+		$rendered_cells = "";
+		
+		$template_cell = $this->GetTemplateCell();
+		
+		$regx = "/\{cell\:\:[0-9]+\}/";
+		
+		if (preg_match($regx, $template_cell, $matches)) {
+			foreach ($cells as $key => $cell) {
+				$rendered_cells = $rendered_cells . preg_replace("/\{cell\:\:$key\}/", $cell, $template_cell);
+			}
+		}
+		
+		$cell_header = preg_split("/\[cell\]/", $this->GetTemplateRow(), 2);
+		$cell_footer = preg_split("/\[\/cell\]/", $this->GetTemplateRow(), 2);
+		
+		$return_row = $cell_header[0] . $rendered_cells . $cell_footer[1];		
+		
+		return $return_row;
+		
+	}
+	
+	public function ParseTemplate(&$table_content, $table_type = 10) {
 		
 		$return_template = "";
 		$rendered_rows = "";
 		
 		foreach ($table_content as $cells) {
-			$rendered_rows = $rendered_rows . $this->RenderCells($cells);
+			switch ($table_type) {
+				case 20:
+					$rendered_rows = $rendered_rows . $this->RenderCellsI($cells);
+					break;
+				case 10:
+				default:
+					$rendered_rows = $rendered_rows . $this->RenderCells($cells);
+			}
 		}
 		
 		$row_header = preg_split("/\[row\]/", $this->GetTemplate(), 2);
