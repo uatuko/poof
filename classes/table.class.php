@@ -109,9 +109,9 @@ class Table implements RenderInterface, AdminInterface {
 		$table_template = new TableTemplate($this->GetTableTemplateID(), 'dbase', $this->config);
 		
 		if (is_array($table_contents)) {
-			$rendered_content = $table_template->ParseTemplate($table_contents);
+			$rendered_content = $table_template->ParseTemplate($table_contents, $this->GetTableType());
 		} else {
-			$rendered_content = $table_template->ParseTemplate($this->GetTableContentsArray());
+			$rendered_content = $table_template->ParseTemplate($this->GetTableContentsArray(), $this->GetTableType());
 		}
 
 		unset($table_template);
@@ -187,15 +187,13 @@ class TableTemplate extends Template {
 		// allowing a different template for each cell
 		
 		$return_row = "";
-		$rendered_cells = "";
-		
-		$template_cell = $this->GetTemplateCell();
+		$rendered_cells = $this->GetTemplateCell();
 		
 		$regx = "/\{cell\:\:[0-9]+\}/";
 		
-		if (preg_match($regx, $template_cell, $matches)) {
+		if (preg_match($regx, $rendered_cells, $matches)) {
 			foreach ($cells as $key => $cell) {
-				$rendered_cells = $rendered_cells . preg_replace("/\{cell\:\:$key\}/", $cell, $template_cell);
+				$rendered_cells = preg_replace("/\{cell\:\:$key\}/", $cell, $rendered_cells);
 			}
 		}
 		
