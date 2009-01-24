@@ -19,14 +19,19 @@ Installation
 		
 	You will find the MySQL DB dump in MySQL/. Restore that to your MySQL server. 
 	
+	NOTE: *.install.sql file is NOT a DB dump but it creates all the required DB structure and
+		  populate with system data. This file can be used as an SQL query.
+	
 	Change or create a new configuration file in config/. Make sure you are loading the correct 
 	configuration file in index.php (line 37).
+	
+	If you are experiencing trouble, refer to the .htaccess file first before reporting bugs. 
 	
 	Please report all bugz at http://tracker.squad17.org/
 
 	Project URLs
 		- http://www.squad17.org/phpoocmf
-		- http://phpoocmf.sourceforge.net/
+		- http://demo.squad17.org/ - Demo
 		- http://sourceforge.net/projects/phpoocmf
 		
 		

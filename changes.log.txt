@@ -15,6 +15,7 @@ Changes
 		
 	+ Table Module
 		- General improvements
+		- Process each cell individually (type 20) allowing advanced table templates.
 		
 	+ Site Module
 		- General improvements
@@ -22,6 +23,10 @@ Changes
 	+ Removed unnecessary files
 	
 	+ .htaccess bug fix and more options, comments
+	
+	+ SQL installation file
+		- sqd_oo.install.sql file to simply create the required DB structure and populate with system data.
+		  This file can be used instead of the SQL Dump. 
 	
 	
 	
