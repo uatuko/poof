@@ -5,7 +5,7 @@
 	</site>
 	<database>
 		<mysql>
-			<server>140.15.135.69</server>
+			<server>140.15.140.251</server>
 			<port>3306</port>
 			<username>sqdAdmin</username>
 			<password>noa</password>
