@@ -5,7 +5,7 @@
 	</site>
 	<database>
 		<mysql>
-			<server>192.168.4.1</server>
+			<server>veyron.restricted.san</server>
 			<port>3306</port>
 			<username>sqdAdmin</username>
 			<password>noa</password>

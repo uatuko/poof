@@ -25,11 +25,11 @@ class User implements RenderInterface {
 		
 		switch ($request[1]) {
 			case 'logout':
-				// clear user session
-				// display message and redirect
-				// header("refresh:5; /");
 				unset($_SESSION['user']);
 				$return = "Logged out";
+				
+				// FIX ME: needs to redirect to the {url_prefix}
+				header("refresh:5; /");
 				break;
 			case 'login':
 			default:

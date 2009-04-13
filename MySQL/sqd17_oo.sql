@@ -1,7 +1,7 @@
 -- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------
--- Server version	5.0.45-community-nt
+-- Server version	5.0.67-0ubuntu6
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -1207,7 +1207,7 @@ DROP PROCEDURE IF EXISTS `sqd_getSiteTheme`;
 DELIMITER $$
 
 /*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='' */ $$
-CREATE DEFINER=`mysql_fake_admin`@`%` PROCEDURE `sqd_getSiteTheme`(IN site VARCHAR(10))
+CREATE DEFINER=`sqdAdmin`@`%` PROCEDURE `sqd_getSiteTheme`(IN site VARCHAR(10))
 BEGIN
 SELECT
 	t.`theme_name`
@@ -1249,7 +1249,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd
 
 DROP TABLE IF EXISTS `sqd_view_forms`;
 DROP VIEW IF EXISTS `sqd_view_forms`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd_view_forms` AS select `f`.`form_id` AS `form_id`,`f`.`form_name` AS `form_name`,`f`.`form_method` AS `form_method`,`f`.`form_action` AS `form_action`,`f`.`form_type` AS `form_type`,`f`.`form_submit_class` AS `form_submit_class`,`t`.`template` AS `template` from ((`sqd_forms` `f` join `sqd_form_templates` `Ft` on((`f`.`form_id` = `ft`.`form_id`))) join `sqd_templates` `t` on((`ft`.`template_id` = `t`.`template_id`)));
+CREATE ALGORITHM=UNDEFINED DEFINER=`sqdAdmin`@`%` SQL SECURITY DEFINER VIEW `sqd_view_forms` AS select `f`.`form_id` AS `form_id`,`f`.`form_name` AS `form_name`,`f`.`form_method` AS `form_method`,`f`.`form_action` AS `form_action`,`f`.`form_type` AS `form_type`,`f`.`form_submit_class` AS `form_submit_class`,`t`.`template` AS `template` from ((`sqd_forms` `f` join `sqd_form_templates` `ft` on((`f`.`form_id` = `ft`.`form_id`))) join `sqd_templates` `t` on((`ft`.`template_id` = `t`.`template_id`)));
 
 --
 -- Definition of view `sqd_view_tables`
