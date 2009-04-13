@@ -99,6 +99,9 @@ class Content implements RenderInterface, AdminInterface {
 					$f = new Form("content-add-new", $this->config);
 					return $f->ReturnRenderedContent();
 					break;
+				case 'edit': 
+					return "Edit screen";
+					break;
 			}
 		}
 		

@@ -28,7 +28,7 @@ class ContentPage extends Content {
 		
 		/*
 		 * To avoid 'Commands out of sync; you can't run this command now' 
-		 * error why using mysqli
+		 * error when using mysqli
 		 * 
 		 * FIX ME: This MUST be properly fixed in the Database class
 		 * 
@@ -50,6 +50,7 @@ class ContentPage extends Content {
 		}
 		
 		if ($this->page_alias) {
+			// system override
 			$page_alias[0] = $this->page_alias;
 		} else {
 			if (!$this->CheckPageURL($page_alias[0])) {

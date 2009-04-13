@@ -38,6 +38,10 @@ class User implements RenderInterface {
 				} else {
 					$f = new Form("user-login", $this->config);
 					$return = $f->ReturnRenderedContent();
+					
+					// Session var to store the REFERER
+					if (session_id() == "") session_start();
+					$_SESSION['HTTP_REFERER'] = getenv("HTTP_REFERER");
 				}
 		}
 		

@@ -617,7 +617,7 @@ INSERT INTO `sqd_tables` (`table_id`,`table_alias`,`table_type`,`table_query`) V
  (2,'admin-modules',15,'SELECT module_name FROM sqd_modules;'),
  (3,'contentpage_table_pages',10,'SELECT p.`page_id`, p.`page_alias`, \r\n	CASE p.`template_priority` WHEN 1 THEN \'local-file\'\r\n    	WHEN 0 THEN \'database\' END AS template_priority\r\nFROM `sqd_view_contentpages` p;'),
  (4,'contentpage_table_namedpages',10,'SELECT CONCAT(n.`page_id`, \':\', n.`name_id`) AS name_id,\r\n	n.`page_alias`, n.`name`, \r\n    CASE 1 WHEN 1 THEN \'true\' ELSE \'false\' END AS visibility,\r\n	CASE n.`template_priority` WHEN 1 THEN \'local-file\'\r\n    	WHEN 0 THEN \'database\' END AS template_priority\r\nFROM `sqd_view_contentpage_names` n;'),
- (5,'content-table',10,'SELECT c.`content_id`, c.`content_alias`, c.`content_type`, c.`local_path` FROM `sqd_view_contents` c;'),
+ (5,'content-table',10,'SELECT c.`content_id`, c.`content_alias`, c.`content_type`, c.`local_path`, \r\n	CONCAT(\'<a href=\"?config=edit&id=\', c.`content_id` ,\'\">edit</a>\') AS `edit_link`\r\nFROM `sqd_view_contents` c;'),
  (6,'table-table',10,'SELECT t.`table_id`, t.`table_alias`, t.`table_type`, t.`table_query` FROM `sqd_view_tables` t;'),
  (7,'form-table',10,'SELECT f.`form_id`, f.`form_name`, \r\n	CASE f.`form_method`\r\n    	WHEN 1 THEN \'POST\'\r\n        ELSE \'GET\' END AS form_method, \r\n    f.`form_type`, f.`form_submit_class`, f.`form_action` \r\nFROM `sqd_view_forms` f;'),
  (8,'test_table',20,'SELECT template_id, template_alias FROM sqd_templates;');
@@ -708,6 +708,30 @@ INSERT INTO `sqd_themes` (`theme_id`,`theme_name`) VALUES
  (1,'default'),
  (2,'admin');
 /*!40000 ALTER TABLE `sqd_themes` ENABLE KEYS */;
+
+
+--
+-- Definition of table `sqd_user`
+--
+
+DROP TABLE IF EXISTS `sqd_user`;
+CREATE TABLE `sqd_user` (
+  `user_id` int(11) NOT NULL auto_increment,
+  `user_name` varchar(50) NOT NULL,
+  `user_password` varchar(32) NOT NULL,
+  `date_created` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`user_id`),
+  UNIQUE KEY `user_name` (`user_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sqd_user`
+--
+
+/*!40000 ALTER TABLE `sqd_user` DISABLE KEYS */;
+INSERT INTO `sqd_user` (`user_id`,`user_name`,`user_password`,`date_created`) VALUES 
+ (1,'administrator','62cadae65f54888f214aa0673003ab59','2009-04-13 13:38:10');
+/*!40000 ALTER TABLE `sqd_user` ENABLE KEYS */;
 
 
 --

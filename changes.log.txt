@@ -1,4 +1,18 @@
 
+Version 0.0.7
+=============
+
+Changes
+-------
+	+ User Module
+		-  
+		
+	+ Content Module
+		- Edit content using the Admin interface
+		
+
+
+
 Version 0.0.6
 =============
 
