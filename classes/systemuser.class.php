@@ -39,6 +39,8 @@ class SystemUser {
 		// If null then return user name
 		// else return First name last name combination
 		
+		return "Firstname Lastname";
+		
 	}
 	
 }

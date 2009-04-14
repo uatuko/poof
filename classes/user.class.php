@@ -74,9 +74,14 @@ class User implements RenderInterface {
 			case 'info_short':
 			default:
 				if (isset($_SESSION['user'])) {
-					$return = "User Logged in";
+					$s = new SystemUser($this->config);
+					$c = new Content("{url_prefix}", $this->config);
+					
+					$return = "You are loggin in as ";
+					$return .= "<a href=\"" . $c->ReturnRenderedContent() . "user/\">";
+					$return .= $s->GetUserName($_SESSION['user']) . "</a>";
 				} else {
-					$return = "User not logged in";
+					$return = "You are not logged in";
 				}		
 		}
 

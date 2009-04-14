@@ -22,7 +22,8 @@ class user_login implements FormSubmitInterface {
 			$_SESSION['user'] = $user_id;
 			
 			// Display success message
-			$return = "Success"; 
+			$c = new ContentPage("user-login-success", $this->config);
+			$return = $c->ReturnRenderedContent(); 
 			
 			// redirect to previous page
 			if (isset($_SESSION['HTTP_REFERER'])) {
@@ -33,9 +34,16 @@ class user_login implements FormSubmitInterface {
 			unset($_SESSION['HTTP_REFERER']);
 			
 		} else {
-			// display login failed message
-			// redisplay the login form
-			$return = "Failed";			
+
+			$c_values["{error-message}"] .= "Error: Authentication failure! <br />";
+			
+			$c = new ContentPage("user-login-error", $this->config);
+			$f = new Form(($this->form_id), $this->config);
+			
+			unset($_POST['submit']);
+			
+			$return = $c->ReturnRenderedContent($c_values);
+			$return = $return . $f->ReturnRenderedContent();	
 		}
 		
 		return $return;

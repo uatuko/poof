@@ -5,7 +5,10 @@ Version 0.0.7
 Changes
 -------
 	+ User Module
-		-  
+		- User authentication 
+		- System admin account
+			-- user: administrator
+			-- pass: mnbvc
 		
 	+ Content Module
 		- Edit content using the Admin interface
